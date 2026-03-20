@@ -1,0 +1,175 @@
+<template>
+    <div class="clp">
+
+        <!-- ── Toolbar: search + filter icon ─────────────────────── -->
+        <div class="clp__toolbar">
+            <div class="clp__toolbar-title">
+                <span class="slds-text-heading_small slds-text-color_default">Clauses</span>
+                <template if:true={totalCount}>
+                    <span class="slds-badge slds-badge_lightest slds-m-left_x-small">{totalCount}</span>
+                </template>
+            </div>
+
+            <div class="clp__toolbar-row">
+                <div class="clp__search">
+                    <lightning-input
+                        type="search"
+                        variant="label-hidden"
+                        placeholder="Search clauses..."
+                        value={searchText}
+                        onchange={handleSearch}>
+                    </lightning-input>
+                </div>
+
+                <!-- Filter icon button with active-count badge -->
+                <div class="clp__filter-btn-wrap">
+                    <lightning-button-icon
+                        icon-name="utility:filterList"
+                        variant={filterBtnVariant}
+                        alternative-text="Filters"
+                        title="Filters"
+                        onclick={toggleFilterPopover}>
+                    </lightning-button-icon>
+                    <template if:true={activeFilterCount}>
+                        <span class="clp__filter-badge">{activeFilterCount}</span>
+                    </template>
+
+                    <!-- ── Filter popover ──────────────────────── -->
+                    <template if:true={isPopoverOpen}>
+                        <div class="slds-popover slds-popover_medium slds-nubbin_top-right clp__popover" role="dialog" aria-label="Filter Clauses">
+                            <button class="slds-button slds-button_icon slds-button_icon-small slds-float_right slds-popover__close"
+                                onclick={toggleFilterPopover}
+                                title="Close">
+                                <lightning-icon icon-name="utility:close" size="x-small" alternative-text="Close"></lightning-icon>
+                            </button>
+
+                            <header class="slds-popover__header">
+                                <h2 class="slds-text-heading_small">Filter Clauses</h2>
+                            </header>
+
+                            <div class="slds-popover__body">
+                                <lightning-combobox
+                                    label="Risk Level"
+                                    value={draft.risk}
+                                    options={riskComboOptions}
+                                    onchange={handleDraftRisk}>
+                                </lightning-combobox>
+
+                                <lightning-combobox
+                                    label="Status"
+                                    value={draft.status}
+                                    options={statusComboOptions}
+                                    onchange={handleDraftStatus}
+                                    class="slds-m-top_x-small">
+                                </lightning-combobox>
+
+                                <lightning-combobox
+                                    label="Industry Domain"
+                                    value={draft.domain}
+                                    options={domainComboOptions}
+                                    onchange={handleDraftDomain}
+                                    class="slds-m-top_x-small">
+                                </lightning-combobox>
+
+                                <lightning-combobox
+                                    label="Reviewer"
+                                    value={draft.reviewer}
+                                    options={reviewerComboOptions}
+                                    onchange={handleDraftReviewer}
+                                    class="slds-m-top_x-small">
+                                </lightning-combobox>
+
+                                <lightning-combobox
+                                    label="Type"
+                                    value={draft.type}
+                                    options={typeComboOptions}
+                                    onchange={handleDraftType}
+                                    class="slds-m-top_x-small">
+                                </lightning-combobox>
+                            </div>
+
+                            <footer class="slds-popover__footer">
+                                <div class="slds-grid slds-grid_align-spread">
+                                    <lightning-button
+                                        label="Clear All"
+                                        variant="base"
+                                        onclick={clearDraft}>
+                                    </lightning-button>
+                                    <lightning-button
+                                        label="Apply"
+                                        variant="brand"
+                                        onclick={applyFilters}>
+                                    </lightning-button>
+                                </div>
+                            </footer>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Active filter chips ────────────────────────────────── -->
+        <template if:true={hasActiveFilters}>
+            <div class="clp__chips">
+                <template for:each={activeChips} for:item="chip">
+                    <span key={chip.key} class="slds-pill slds-pill_small clp__chip" title={chip.label}>
+                        <span class="slds-pill__label">{chip.label}</span>
+                        <button class="slds-button slds-button_icon slds-button_icon slds-pill__remove"
+                            title="Remove"
+                            data-key={chip.key}
+                            onclick={removeChip}>
+                            <lightning-icon icon-name="utility:close" size="xx-small" alternative-text="Remove"></lightning-icon>
+                        </button>
+                    </span>
+                </template>
+            </div>
+        </template>
+
+        <!-- ── Result count ───────────────────────────────────────── -->
+        <div class="clp__count">
+            <span class="slds-text-body_small slds-text-color_weak">{filteredCount} clause(s)</span>
+        </div>
+
+        <!-- ── Scrollable clause list ─────────────────────────────── -->
+        <div class="clp__list">
+            <template for:each={visibleClauses} for:item="c">
+                <a key={c.clauseId}
+                   class={c._tileClass}
+                   data-id={c.clauseId}
+                   onclick={handleClauseClick}
+                   role="button"
+                   tabindex="0">
+
+                    <span class={c._riskDotClass} title={c.riskLevel}></span>
+
+                    <div class="clp-tile__body">
+                        <div class="clp-tile__top">
+                            <span class="slds-truncate clp-tile__name" title={c.clauseName}>{c.clauseName}</span>
+                            <span class={c._riskBadgeClass}>{c.riskLevel}</span>
+                        </div>
+                        <div class="clp-tile__meta">
+                            <span class={c._statusBadgeClass}>{c.status}</span>
+                            <span class="slds-text-body_small slds-text-color_weak clp-tile__id">{c.clauseNumber}</span>
+                        </div>
+                    </div>
+                </a>
+            </template>
+
+            <template if:true={showMoreVisible}>
+                <div class="slds-align_absolute-center slds-m-vertical_small">
+                    <lightning-button label="Show More" variant="neutral" onclick={handleShowMore}></lightning-button>
+                </div>
+            </template>
+
+            <template if:true={noResults}>
+                <div class="slds-align_absolute-center slds-m-top_large">
+                    <div class="slds-text-align_center">
+                        <lightning-icon icon-name="utility:search" size="small" class="slds-icon-text-default"></lightning-icon>
+                        <p class="slds-text-body_small slds-text-color_weak slds-m-top_x-small">No clauses match your filters.</p>
+                    </div>
+                </div>
+            </template>
+        </div>
+
+    </div>
+</template>

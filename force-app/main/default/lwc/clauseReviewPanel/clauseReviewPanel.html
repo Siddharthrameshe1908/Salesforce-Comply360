@@ -1,0 +1,589 @@
+<template>
+    <div class="crp">
+        <!-- Action modal -->
+        <template if:true={activeAction}>
+            <c-clause-action-modal clause-id={selectedClauseId} action={activeAction} onclose={closeModal}
+                ontaskcreated={handleTaskCreated}>
+            </c-clause-action-modal>
+        </template>
+
+        <!-- Left: Clause list -->
+        <div class="crp__left">
+            <div class="slds-card">
+                <c-clauses-left-panel record-id={recordId} onclauseselect={handleClauseSelect}>
+                </c-clauses-left-panel>
+            </div>
+        </div>
+
+        <!-- Middle: Clause detail / activity / chatter -->
+        <div class="crp__detail">
+            <template if:true={selectedClauseId}>
+                <div class="slds-card crp__detail-card">
+
+                    <!-- ── FIXED TAB HEADER ── -->
+                    <div class="crp__tab-header">
+                        <div class="crp__tab-bar">
+                            <button class={detailsTabClass} data-tab="details" onclick={handleTabClick}>
+                                Details
+                            </button>
+                            <button class={activityTabClass} data-tab="activity" onclick={handleTabClick}>
+                                Activity
+                            </button>
+                            <button class={chatterTabClass} data-tab="chatter" onclick={handleTabClick}>
+                                Chatter
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- ── SCROLLABLE TAB BODY ── -->
+                    <div class="crp__tab-body">
+
+                        <!-- DETAILS TAB -->
+                        <template if:true={isDetailsTab}>
+                            <div class="crp__tab-pane">
+                                <div class="crp__actions">
+                                    <lightning-button label="Reject" variant="destructive" onclick={handleReject}
+                                        class="slds-m-left_x-small">
+                                    </lightning-button>
+                                    <lightning-button label="Approve" variant="brand" onclick={handleApprove}
+                                        class="slds-m-left_x-small">
+                                    </lightning-button>
+                                </div>
+
+                                <div class="crp__record-wrap slds-p-horizontal_medium slds-p-bottom_medium">
+
+                                    <!-- VIEW MODE -->
+                                    <template if:false={isEditMode}>
+                                        <lightning-record-view-form record-id={selectedClauseId}
+                                            object-api-name="devcomply360__Clause__c">
+                                            <div class="crp-fields">
+                                                <!-- Row 1 -->
+                                                <div class="crp-row">
+                                                    <div class="crp-field crp-field--readonly">
+                                                        <div class="crp-field__main">
+                                                            <div class="crp-field__value readonly">
+                                                                <lightning-output-field
+                                                                    field-name="devcomply360__Clause_ID__c">
+                                                                </lightning-output-field>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="crp-field crp-field--readonly">
+                                                        <div class="crp-field__main">
+                                                            <div class="crp-field__value readonly">
+                                                                <lightning-output-field
+                                                                    field-name="devcomply360__Source_Compliance__c">
+                                                                </lightning-output-field>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Row 2 -->
+                                                <div class="crp-row">
+                                                    <div class="crp-field">
+                                                        <div class="crp-field__main">
+                                                            <div class="crp-field__value">
+                                                                <lightning-output-field field-name="Name">
+                                                                </lightning-output-field>
+                                                            </div>
+                                                        </div>
+                                                        <div class="crp-field__icon">
+                                                            <button type="button" class="crp-edit-btn" title="Edit"
+                                                                onclick={enterEditMode}>
+                                                                <lightning-icon icon-name="utility:edit" size="xx-small"
+                                                                    alternative-text="Edit">
+                                                                </lightning-icon>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="crp-field">
+                                                        <div class="crp-field__main">
+                                                            <div class="crp-field__value">
+                                                                <lightning-output-field
+                                                                    field-name="devcomply360__Clause_Text__c">
+                                                                </lightning-output-field>
+                                                            </div>
+                                                        </div>
+                                                        <div class="crp-field__icon">
+                                                            <button type="button" class="crp-edit-btn" title="Edit"
+                                                                onclick={enterEditMode}>
+                                                                <lightning-icon icon-name="utility:edit" size="xx-small"
+                                                                    alternative-text="Edit">
+                                                                </lightning-icon>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Row 3 -->
+                                                <div class="crp-row">
+                                                    <div class="crp-field">
+                                                        <div class="crp-field__main">
+                                                            <div class="crp-field__value">
+                                                                <lightning-output-field
+                                                                    field-name="devcomply360__Clause_Owner__c">
+                                                                </lightning-output-field>
+                                                            </div>
+                                                        </div>
+                                                        <div class="crp-field__icon">
+                                                            <button type="button" class="crp-edit-btn" title="Edit"
+                                                                onclick={enterEditMode}>
+                                                                <lightning-icon icon-name="utility:edit" size="xx-small"
+                                                                    alternative-text="Edit">
+                                                                </lightning-icon>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="crp-field">
+                                                        <div class="crp-field__main">
+                                                            <div class="crp-field__value">
+                                                                <lightning-output-field
+                                                                    field-name="devcomply360__Section__c">
+                                                                </lightning-output-field>
+                                                            </div>
+                                                        </div>
+                                                        <div class="crp-field__icon">
+                                                            <button type="button" class="crp-edit-btn" title="Edit"
+                                                                onclick={enterEditMode}>
+                                                                <lightning-icon icon-name="utility:edit" size="xx-small"
+                                                                    alternative-text="Edit">
+                                                                </lightning-icon>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Row 4 -->
+                                                <div class="crp-row">
+                                                    <div class="crp-field">
+                                                        <div class="crp-field__main">
+                                                            <div class="crp-field__value">
+                                                                <lightning-output-field
+                                                                    field-name="devcomply360__Clause_Type__c">
+                                                                </lightning-output-field>
+                                                            </div>
+                                                        </div>
+                                                        <div class="crp-field__icon">
+                                                            <button type="button" class="crp-edit-btn" title="Edit"
+                                                                onclick={enterEditMode}>
+                                                                <lightning-icon icon-name="utility:edit" size="xx-small"
+                                                                    alternative-text="Edit">
+                                                                </lightning-icon>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="crp-field">
+                                                        <div class="crp-field__main">
+                                                            <div class="crp-field__value">
+                                                                <lightning-output-field
+                                                                    field-name="devcomply360__Page_Number__c">
+                                                                </lightning-output-field>
+                                                            </div>
+                                                        </div>
+                                                        <div class="crp-field__icon">
+                                                            <button type="button" class="crp-edit-btn" title="Edit"
+                                                                onclick={enterEditMode}>
+                                                                <lightning-icon icon-name="utility:edit" size="xx-small"
+                                                                    alternative-text="Edit">
+                                                                </lightning-icon>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Row 5 -->
+                                                <div class="crp-row">
+                                                    <div class="crp-field">
+                                                        <div class="crp-field__main">
+                                                            <div class="crp-field__value">
+                                                                <lightning-output-field
+                                                                    field-name="devcomply360__Category__c">
+                                                                </lightning-output-field>
+                                                            </div>
+                                                        </div>
+                                                        <div class="crp-field__icon">
+                                                            <button type="button" class="crp-edit-btn" title="Edit"
+                                                                onclick={enterEditMode}>
+                                                                <lightning-icon icon-name="utility:edit" size="xx-small"
+                                                                    alternative-text="Edit">
+                                                                </lightning-icon>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="crp-field">
+                                                        <div class="crp-field__main">
+                                                            <div class="crp-field__value">
+                                                                <lightning-output-field
+                                                                    field-name="devcomply360__Description__c">
+                                                                </lightning-output-field>
+                                                            </div>
+                                                        </div>
+                                                        <div class="crp-field__icon">
+                                                            <button type="button" class="crp-edit-btn" title="Edit"
+                                                                onclick={enterEditMode}>
+                                                                <lightning-icon icon-name="utility:edit" size="xx-small"
+                                                                    alternative-text="Edit">
+                                                                </lightning-icon>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Row 6 -->
+                                                <div class="crp-row">
+                                                    <div class="crp-field">
+                                                        <div class="crp-field__main">
+                                                            <div class="crp-field__value">
+                                                                <lightning-output-field
+                                                                    field-name="devcomply360__Obligation_Category__c">
+                                                                </lightning-output-field>
+                                                            </div>
+                                                        </div>
+                                                        <div class="crp-field__icon">
+                                                            <button type="button" class="crp-edit-btn" title="Edit"
+                                                                onclick={enterEditMode}>
+                                                                <lightning-icon icon-name="utility:edit" size="xx-small"
+                                                                    alternative-text="Edit">
+                                                                </lightning-icon>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="crp-field">
+                                                        <div class="crp-field__main">
+                                                            <div class="crp-field__value">
+                                                                <lightning-output-field
+                                                                    field-name="devcomply360__Version__c">
+                                                                </lightning-output-field>
+                                                            </div>
+                                                        </div>
+                                                        <div class="crp-field__icon">
+                                                            <button type="button" class="crp-edit-btn" title="Edit"
+                                                                onclick={enterEditMode}>
+                                                                <lightning-icon icon-name="utility:edit" size="xx-small"
+                                                                    alternative-text="Edit">
+                                                                </lightning-icon>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Row 8 -->
+                                                <div class="crp-row">
+                                                    <div class="crp-field">
+                                                        <div class="crp-field__main">
+                                                            <div class="crp-field__value">
+                                                                <lightning-output-field
+                                                                    field-name="devcomply360__Risk_Level__c">
+                                                                </lightning-output-field>
+                                                            </div>
+                                                        </div>
+                                                        <div class="crp-field__icon">
+                                                            <button type="button" class="crp-edit-btn" title="Edit"
+                                                                onclick={enterEditMode}>
+                                                                <lightning-icon icon-name="utility:edit" size="xx-small"
+                                                                    alternative-text="Edit">
+                                                                </lightning-icon>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="crp-field">
+                                                        <div class="crp-field__main">
+                                                            <div class="crp-field__value">
+                                                                <lightning-output-field
+                                                                    field-name="devcomply360__Review_Date__c">
+                                                                </lightning-output-field>
+                                                            </div>
+                                                        </div>
+                                                        <div class="crp-field__icon">
+                                                            <button type="button" class="crp-edit-btn" title="Edit"
+                                                                onclick={enterEditMode}>
+                                                                <lightning-icon icon-name="utility:edit" size="xx-small"
+                                                                    alternative-text="Edit">
+                                                                </lightning-icon>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Row 9 -->
+                                                <div class="crp-row">
+                                                    <div class="crp-field">
+                                                        <div class="crp-field__main">
+                                                            <div class="crp-field__value">
+                                                                <lightning-output-field
+                                                                    field-name="devcomply360__Reviewer__c">
+                                                                </lightning-output-field>
+                                                            </div>
+                                                        </div>
+                                                        <div class="crp-field__icon">
+                                                            <button type="button" class="crp-edit-btn" title="Edit"
+                                                                onclick={enterEditMode}>
+                                                                <lightning-icon icon-name="utility:edit" size="xx-small"
+                                                                    alternative-text="Edit">
+                                                                </lightning-icon>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="crp-field">
+                                                        <div class="crp-field__main">
+                                                            <div class="crp-field__value">
+                                                                <lightning-output-field
+                                                                    field-name="devcomply360__Review_Notes__c">
+                                                                </lightning-output-field>
+                                                            </div>
+                                                        </div>
+                                                        <div class="crp-field__icon">
+                                                            <button type="button" class="crp-edit-btn" title="Edit"
+                                                                onclick={enterEditMode}>
+                                                                <lightning-icon icon-name="utility:edit" size="xx-small"
+                                                                    alternative-text="Edit">
+                                                                </lightning-icon>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Row 10 -->
+                                                <div class="crp-row">
+                                                    <div class="crp-field">
+                                                        <div class="crp-field__main">
+                                                            <div class="crp-field__value">
+                                                                <lightning-output-field
+                                                                    field-name="devcomply360__Due_Date__c">
+                                                                </lightning-output-field>
+                                                            </div>
+                                                        </div>
+                                                        <div class="crp-field__icon">
+                                                            <button type="button" class="crp-edit-btn" title="Edit"
+                                                                onclick={enterEditMode}>
+                                                                <lightning-icon icon-name="utility:edit" size="xx-small"
+                                                                    alternative-text="Edit">
+                                                                </lightning-icon>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="crp-field">
+                                                        <div class="crp-field__main">
+                                                            <div class="crp-field__value">
+                                                                <lightning-output-field
+                                                                    field-name="devcomply360__Review_Frequency__c">
+                                                                </lightning-output-field>
+                                                            </div>
+                                                        </div>
+                                                        <div class="crp-field__icon">
+                                                            <button type="button" class="crp-edit-btn" title="Edit"
+                                                                onclick={enterEditMode}>
+                                                                <lightning-icon icon-name="utility:edit" size="xx-small"
+                                                                    alternative-text="Edit">
+                                                                </lightning-icon>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Row 11 -->
+                                                <div class="crp-row">
+                                                    <div class="crp-field">
+                                                        <div class="crp-field__main">
+                                                            <div class="crp-field__value">
+                                                                <lightning-output-field
+                                                                    field-name="devcomply360__Assigned_To__c">
+                                                                </lightning-output-field>
+                                                            </div>
+                                                        </div>
+                                                        <div class="crp-field__icon">
+                                                            <button type="button" class="crp-edit-btn" title="Edit"
+                                                                onclick={enterEditMode}>
+                                                                <lightning-icon icon-name="utility:edit" size="xx-small"
+                                                                    alternative-text="Edit">
+                                                                </lightning-icon>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="crp-field">
+                                                        <div class="crp-field__main">
+                                                            <div class="crp-field__value">
+                                                                <lightning-output-field
+                                                                    field-name="devcomply360__Clause_Lifecycle_Status__c">
+                                                                </lightning-output-field>
+                                                            </div>
+                                                        </div>
+                                                        <div class="crp-field__icon">
+                                                            <button type="button" class="crp-edit-btn" title="Edit"
+                                                                onclick={enterEditMode}>
+                                                                <lightning-icon icon-name="utility:edit" size="xx-small"
+                                                                    alternative-text="Edit">
+                                                                </lightning-icon>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </lightning-record-view-form>
+                                    </template>
+
+                                    <!-- EDIT MODE -->
+                                    <template if:true={isEditMode}>
+                                        <lightning-record-edit-form object-api-name="devcomply360__Clause__c"
+                                            record-id={selectedClauseId} onsuccess={handleSaveSuccess}
+                                            onsubmit={handleSubmit} onerror={handleSaveError}>
+                                            <lightning-messages></lightning-messages>
+                                            <div class="crp-fields crp-fields--edit">
+                                                <div class="crp-row">
+                                                    <div class="crp-field crp-field--readonly">
+                                                        <div class="crp-field__value readonly">
+                                                            <lightning-output-field
+                                                                field-name="devcomply360__Clause_ID__c">
+                                                            </lightning-output-field>
+                                                        </div>
+                                                    </div>
+                                                    <div class="crp-field crp-field--readonly">
+                                                        <div class="crp-field__value readonly">
+                                                            <lightning-output-field
+                                                                field-name="devcomply360__Source_Compliance__c">
+                                                            </lightning-output-field>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="crp-row">
+                                                    <div class="crp-field">
+                                                        <lightning-input-field field-name="Name">
+                                                        </lightning-input-field>
+                                                    </div>
+                                                    <div class="crp-field">
+                                                        <lightning-input-field
+                                                            field-name="devcomply360__Clause_Text__c">
+                                                        </lightning-input-field>
+                                                    </div>
+                                                </div>
+                                                <div class="crp-row">
+                                                    <div class="crp-field">
+                                                        <lightning-input-field
+                                                            field-name="devcomply360__Clause_Owner__c">
+                                                        </lightning-input-field>
+                                                    </div>
+                                                    <div class="crp-field">
+                                                        <lightning-input-field field-name="devcomply360__Section__c">
+                                                        </lightning-input-field>
+                                                    </div>
+                                                </div>
+                                                <div class="crp-row">
+                                                    <div class="crp-field">
+                                                        <lightning-input-field
+                                                            field-name="devcomply360__Clause_Type__c">
+                                                        </lightning-input-field>
+                                                    </div>
+                                                    <div class="crp-field">
+                                                        <lightning-input-field
+                                                            field-name="devcomply360__Page_Number__c">
+                                                        </lightning-input-field>
+                                                    </div>
+                                                </div>
+                                                <div class="crp-row">
+                                                    <div class="crp-field">
+                                                        <lightning-input-field field-name="devcomply360__Category__c">
+                                                        </lightning-input-field>
+                                                    </div>
+                                                    <div class="crp-field">
+                                                        <lightning-input-field
+                                                            field-name="devcomply360__Description__c">
+                                                        </lightning-input-field>
+                                                    </div>
+                                                </div>
+                                                <div class="crp-row">
+                                                    <div class="crp-field">
+                                                        <lightning-input-field
+                                                            field-name="devcomply360__Obligation_Category__c">
+                                                        </lightning-input-field>
+                                                    </div>
+                                                    <div class="crp-field">
+                                                        <lightning-input-field field-name="devcomply360__Version__c">
+                                                        </lightning-input-field>
+                                                    </div>
+                                                </div>
+                                                <div class="crp-row">
+                                                    <div class="crp-field">
+                                                        <lightning-input-field field-name="devcomply360__Risk_Level__c">
+                                                        </lightning-input-field>
+                                                    </div>
+                                                    <div class="crp-field">
+                                                        <lightning-input-field
+                                                            field-name="devcomply360__Review_Date__c">
+                                                        </lightning-input-field>
+                                                    </div>
+                                                </div>
+                                                <div class="crp-row">
+                                                    <div class="crp-field">
+                                                        <lightning-input-field field-name="devcomply360__Reviewer__c">
+                                                        </lightning-input-field>
+                                                    </div>
+                                                    <div class="crp-field">
+                                                        <lightning-input-field
+                                                            field-name="devcomply360__Review_Notes__c">
+                                                        </lightning-input-field>
+                                                    </div>
+                                                </div>
+                                                <div class="crp-row">
+                                                    <div class="crp-field">
+                                                        <lightning-input-field field-name="devcomply360__Due_Date__c">
+                                                        </lightning-input-field>
+                                                    </div>
+                                                    <div class="crp-field">
+                                                        <lightning-input-field
+                                                            field-name="devcomply360__Review_Frequency__c">
+                                                        </lightning-input-field>
+                                                    </div>
+                                                </div>
+                                                <div class="crp-row">
+                                                    <div class="crp-field">
+                                                        <lightning-input-field
+                                                            field-name="devcomply360__Assigned_To__c">
+                                                        </lightning-input-field>
+                                                    </div>
+                                                    <div class="crp-field">
+                                                        <lightning-input-field
+                                                            field-name="devcomply360__Clause_Lifecycle_Status__c">
+                                                        </lightning-input-field>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="crp-form-actions">
+                                                <lightning-button label="Cancel" onclick={handleCancelEdit}
+                                                    class="slds-m-right_small">
+                                                </lightning-button>
+                                                <lightning-button variant="brand" type="submit" label="Save">
+                                                </lightning-button>
+                                            </div>
+                                        </lightning-record-edit-form>
+                                    </template>
+
+                                </div>
+                            </div>
+                        </template>
+
+                        <!-- ACTIVITY TAB -->
+                        <template if:true={isActivityTab}>
+                            <div class="crp__tab-pane">
+                                <c-clause-activity-panel record-id={selectedClauseId}></c-clause-activity-panel>
+                            </div>
+                        </template>
+
+                        <!-- CHATTER TAB -->
+                        <template if:true={isChatterTab}>
+                            <div class="crp__tab-pane">
+                                <c-clause-chatter-panel record-id={selectedClauseId}></c-clause-chatter-panel>
+                            </div>
+                        </template>
+
+                    </div>
+                </div>
+            </template>
+
+            <template if:false={selectedClauseId}>
+                <div class="slds-card">
+                    <div class="slds-align_absolute-center slds-p-around_large">
+                        <p class="slds-text-body_regular slds-text-color_weak">Select a clause from the list.</p>
+                    </div>
+                </div>
+            </template>
+        </div>
+
+        <!-- Right: Document viewer -->
+        <div class="crp__right">
+            <c-clause-document-viewer record-id={recordId} document-name="Compliance Document.pdf">
+            </c-clause-document-viewer>
+        </div>
+    </div>
+</template>

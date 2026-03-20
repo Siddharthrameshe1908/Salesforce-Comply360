@@ -1,0 +1,99 @@
+<template>
+    <article class="cfp">
+        <div class="cfp__header">
+            <div class="cfp__header-left">
+                <lightning-avatar fallback-icon-name="standard:user" size="small" alternative-text={createdByName}>
+                </lightning-avatar>
+
+                <div class="cfp__meta">
+                    <div class="cfp__name">{createdByName}</div>
+                    <div class="cfp__time">
+                        <template if:true={createdDateValue}>
+                            <lightning-relative-date-time value={createdDateValue}></lightning-relative-date-time>
+                        </template>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cfp__header-right">
+                <lightning-button-menu alternative-text="Actions" icon-name="utility:down" menu-alignment="right" onselect={handleMenuSelect}>
+                    <lightning-menu-item value="edit" label="Edit"></lightning-menu-item>
+                    <lightning-menu-item value="bookmark" label={bookmarkLabel}></lightning-menu-item>
+                    <lightning-menu-item value="delete" label="Delete"></lightning-menu-item>
+                </lightning-button-menu>
+            </div>
+        </div>
+
+        <template if:false={isEditMode}>
+            <div class="cfp__body">
+                <lightning-formatted-rich-text value={post.Body}></lightning-formatted-rich-text>
+            </div>
+        </template>
+
+        <template if:true={isEditMode}>
+            <div class="cfp__edit-box">
+                <lightning-input-rich-text value={editBody} onchange={handleEditChange}>
+                </lightning-input-rich-text>
+                <div class="cfp__edit-actions">
+                    <lightning-button label="Cancel" onclick={cancelEdit} class="slds-m-right_small">
+                    </lightning-button>
+                    <lightning-button label="Save" variant="brand" onclick={saveEdit} disabled={isSaveEditDisabled}>
+                    </lightning-button>
+                </div>
+            </div>
+        </template>
+
+        <div class="cfp__actions">
+            <button class="cfp__action-btn" onclick={handleLikeClick}>
+                <lightning-icon icon-name={likeIcon} size="xx-small" class="cfp__icon"></lightning-icon>
+                <span>{likeLabel}</span>
+            </button>
+
+            <button class="cfp__action-btn" onclick={toggleCommentBox}>
+                <lightning-icon icon-name="utility:comments" size="xx-small" class="cfp__icon"></lightning-icon>
+                <span>Comment</span>
+            </button>
+
+            <template if:true={hasLikes}>
+                <span class="cfp__count">{localLikeCount} like(s)</span>
+            </template>
+
+            <template if:true={hasComments}>
+                <span class="cfp__count">{commentCountLabel}</span>
+            </template>
+        </div>
+
+        <template if:true={hasComments}>
+            <div class="cfp__comments">
+                <template for:each={normalizedComments} for:item="comment">
+                    <div key={comment.Id} class="cfp__comment">
+                        <div class="cfp__comment-header">
+                            <span class="cfp__comment-name">{comment.CreatedByName}</span>
+                            <span class="cfp__comment-time">
+                                <lightning-relative-date-time
+                                    value={comment.createdDateValue}></lightning-relative-date-time>
+                            </span>
+                        </div>
+                        <div class="cfp__comment-body">
+                            <lightning-formatted-rich-text value={comment.CommentBody}></lightning-formatted-rich-text>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </template>
+
+        <template if:true={isCommentBoxOpen}>
+            <div class="cfp__comment-box">
+                <lightning-input-rich-text value={commentBody} placeholder="Write a comment..."
+                    onchange={handleCommentChange}>
+                </lightning-input-rich-text>
+
+                <div class="cfp__comment-actions">
+                    <lightning-button label="Add Comment" variant="brand" onclick={handleAddComment}
+                        disabled={isAddCommentDisabled}>
+                    </lightning-button>
+                </div>
+            </div>
+        </template>
+    </article>
+</template>

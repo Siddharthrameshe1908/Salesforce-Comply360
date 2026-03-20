@@ -1,0 +1,79 @@
+<template>
+    <div class="ccp">
+        <lightning-card>
+            <div class="ccp__inner">
+                <div class="ccp__toolbar slds-p-horizontal_medium slds-p-top_medium">
+                    <div class="ccp__toolbar-left">
+                        <lightning-combobox
+                            name="sortBy"
+                            label="Sort by"
+                            value={sortBy}
+                            options={sortOptions}
+                            onchange={handleSortChange}>
+                        </lightning-combobox>
+                    </div>
+
+                    <div class="ccp__toolbar-right">
+                        <lightning-input
+                            type="search"
+                            variant="label-hidden"
+                            placeholder="Search this feed..."
+                            value={searchText}
+                            onchange={handleSearchChange}>
+                        </lightning-input>
+
+                        <lightning-button-icon
+                            icon-name="utility:refresh"
+                            alternative-text="Refresh"
+                            title="Refresh"
+                            onclick={handleRefresh}>
+                        </lightning-button-icon>
+                    </div>
+                </div>
+
+                <div class="ccp__composer">
+                    <lightning-input-rich-text
+                        value={commentBody}
+                        placeholder="Share an update..."
+                        onchange={handleChange}>
+                    </lightning-input-rich-text>
+
+                    <div class="ccp__actions">
+                        <lightning-button
+                            label="Post"
+                            variant="brand"
+                            onclick={handlePostClick}
+                            disabled={isPostDisabled}>
+                        </lightning-button>
+                    </div>
+                </div>
+
+                <div class="ccp__feed">
+                    <template if:true={isLoading}>
+                        <div class="ccp__state slds-p-around_medium">
+                            <lightning-spinner alternative-text="Loading feed" size="small"></lightning-spinner>
+                        </div>
+                    </template>
+
+                    <template if:true={hasPosts}>
+                        <template for:each={filteredPosts} for:item="post">
+                            <c-chatter-feed-post
+                                key={post.Id}
+                                post={post}
+                                onrefreshfeed={handleRefresh}>
+                            </c-chatter-feed-post>
+                        </template>
+                    </template>
+
+                    <template if:false={hasPosts}>
+                        <template if:false={isLoading}>
+                            <div class="ccp__state slds-p-around_medium slds-text-color_weak">
+                                No Chatter posts yet for this clause.
+                            </div>
+                        </template>
+                    </template>
+                </div>
+            </div>
+        </lightning-card>
+    </div>
+</template>

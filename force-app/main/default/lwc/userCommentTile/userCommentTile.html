@@ -1,0 +1,31 @@
+<template>
+    <template if:true={userComment}>
+        <article class="uct">
+            <div class="uct__header">
+                <div class="uct__avatar">
+                    <lightning-avatar
+                        fallback-icon-name="standard:user"
+                        size="small"
+                        alternative-text="User">
+                    </lightning-avatar>
+                </div>
+
+                <div class="uct__meta">
+                    <div class="uct__name">{createdByName}</div>
+                    <div class="uct__time">
+                        <template if:true={createdDate}>
+                            <lightning-relative-date-time value={createdDate}></lightning-relative-date-time>
+                        </template>
+                        <template if:false={createdDate}>
+                            Just now
+                        </template>
+                    </div>
+                </div>
+            </div>
+
+            <div class="uct__body">
+                <lightning-formatted-rich-text value={userComment.Body}></lightning-formatted-rich-text>
+            </div>
+        </article>
+    </template>
+</template>

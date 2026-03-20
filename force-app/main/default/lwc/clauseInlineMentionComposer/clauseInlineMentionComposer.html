@@ -1,0 +1,42 @@
+<template>
+    <div class="cimc">
+        <div class="cimc__editorWrap">
+            <div
+                class="cimc__editor"
+                contenteditable="true"
+                data-editor
+                oninput={handleInput}
+                onkeyup={handleKeyUp}
+                onblur={handleBlur}>
+            </div>
+
+            <template if:true={showPlaceholder}>
+                <div class="cimc__placeholder">Share an update...</div>
+            </template>
+
+            <template if:true={showSuggestions}>
+                <ul class="cimc__suggestions" role="listbox">
+                    <template for:each={suggestions} for:item="user">
+                        <li
+                            key={user.Id}
+                            class="cimc__suggestion"
+                            data-id={user.Id}
+                            data-name={user.Name}
+                            onclick={handleSelectUser}>
+                            {user.Name}
+                        </li>
+                    </template>
+                </ul>
+            </template>
+        </div>
+
+        <div class="cimc__actions">
+            <lightning-button
+                label="Post"
+                variant="brand"
+                onclick={handlePost}
+                disabled={isPostDisabled}>
+            </lightning-button>
+        </div>
+    </div>
+</template>

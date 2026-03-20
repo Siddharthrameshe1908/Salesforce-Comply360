@@ -1,0 +1,176 @@
+:host {
+    display: block;
+}
+
+.cai {
+    display: grid;
+    /* grid-template-columns: 2rem 2rem 2rem minmax(0, 1fr) auto auto; */
+    grid-template-columns: 2rem 2rem minmax(0, 1fr) 8rem auto;
+    column-gap: 0.25rem;
+    align-items: start;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #ecebea;
+}
+
+.cai__chevronCol,
+.cai__iconCol,
+.cai__dateCol,
+.cai__menuCol {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    min-height: 1.75rem;
+}
+
+/* .cai__checkboxCol{
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    min-height: 1.75rem;
+} */
+
+.cai__contentCol {
+    min-width: 0;
+    padding-right: 0.75rem;
+}
+
+.cai__chevronBtn {
+    margin-top: -0.1rem;
+}
+
+.cai__checkbox {
+    margin-top: -0.15rem;
+}
+
+.cai__timeline {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    min-height: 2.5rem;
+}
+
+.cai__timeline::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 1.6rem;
+    transform: translateX(-50%);
+    width: 2px;
+    height: calc(100% + 1rem);
+    background: #2e844a;
+}
+
+:host(:last-child) .cai__timeline::after {
+    display: none;
+}
+
+.cai__titleRow a {
+    color: #0176d3;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.cai__meta {
+    margin-top: 0.25rem;
+    color: #5f5c5b;
+    font-size: 0.875rem;
+}
+
+.cai__metaRow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem;
+    line-height: 1.4;
+}
+
+.cai__metaItem {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    flex-wrap: wrap;
+}
+
+.cai__metaLabel {
+    font-weight: 600;
+    color: #3e3e3c;
+}
+
+.cai__metaValue {
+    color: #5f5c5b;
+}
+
+.cai__metaSeparator {
+    color: #8e8d8a;
+    margin: 0 0.15rem;
+}
+
+.cai__detailsBox {
+    margin-top: 0.75rem;
+    border: 1px solid #ecebea;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    color: #444;
+    background: #fff;
+}
+
+.cai__label {
+    color: #5f5c5b;
+    font-size: 0.8rem;
+}
+
+.cai__descTop {
+    margin-top: 0.5rem;
+}
+
+.cai__dateCol {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    min-width: 7.5rem;
+    padding-top: 0.05rem;
+}
+
+.cai__dateBlock {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    line-height: 1.25;
+}
+
+.cai__dateLabel {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #5f5c5b;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin-bottom: 0.18rem;
+}
+
+.cai__dateText {
+    font-size: 0.875rem;
+    color: #3e3e3c;
+    white-space: nowrap;
+}
+
+.cai__menuCol {
+    padding-top: 0;
+}
+
+.cai__modalContainer {
+    max-width: 40rem;
+}
+
+.cai__modalHeader {
+    text-align: center;
+}
+
+.cai__modalBody {
+    min-height: 6rem;
+}
+
+.cai__modalFooter {
+    display: flex;
+    justify-content: flex-end;
+}

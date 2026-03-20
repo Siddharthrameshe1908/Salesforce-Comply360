@@ -1,0 +1,48 @@
+<template>
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+            <header class="slds-modal__header">
+                <h2 class="slds-modal__title">{title}</h2>
+            </header>
+            <div class="slds-modal__content slds-p-around_medium">
+                <lightning-textarea
+                    label="Notes"
+                    placeholder="Add notes for this action..."
+                    value={notes}
+                    onchange={handleNotes}
+                    max-length="1000">
+                </lightning-textarea>
+                <template if:true={isApprove}>
+                    <lightning-combobox
+                        label="Priority"
+                        value={priority}
+                        options={priorityOptions}
+                        onchange={handlePriority}
+                        class="slds-m-top_small">
+                    </lightning-combobox>
+                    <lightning-input
+                        type="date"
+                        label="Due Date"
+                        value={dueDate}
+                        onchange={handleDueDate}
+                        class="slds-m-top_small">
+                    </lightning-input>
+                </template>
+                <template if:true={error}>
+                    <p class="slds-text-color_error slds-m-top_small">{error}</p>
+                </template>
+            </div>
+            <footer class="slds-modal__footer">
+                <lightning-button label="Cancel" variant="neutral" onclick={handleCancel}></lightning-button>
+                <lightning-button
+                    label={confirmLabel}
+                    variant={confirmVariant}
+                    onclick={handleConfirm}
+                    disabled={isSaving}
+                    class="slds-m-left_x-small">
+                </lightning-button>
+            </footer>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</template>

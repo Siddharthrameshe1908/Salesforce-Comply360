@@ -1,0 +1,199 @@
+:host {
+    display: block;
+    min-width: 0;
+}
+
+.cap {
+    position: relative;
+    min-height: 520px;
+    padding: 1rem;
+}
+
+.cap__topActions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.cap__btn {
+    min-width: 131px;
+}
+
+.cap__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    color: #5f5c5b;
+    font-size: 0.875rem;
+    flex-wrap: wrap;
+}
+
+.cap__headerActions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.cap__headerActions a {
+    color: #0176d3;
+    text-decoration: none;
+}
+
+.cap__section {
+    margin-bottom: 1rem;
+}
+
+.cap__sectionHeader {
+    background: #f3f3f3;
+    border-radius: 0.375rem;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: #444;
+    cursor: pointer;
+}
+
+.cap__sectionChevron {
+    --slds-c-icon-color-foreground-default: #444;
+}
+
+.cap__items {
+    padding: 0.75rem 0;
+}
+
+.cap__empty {
+    text-align: center;
+    color: #5f5c5b;
+    padding: 1rem 0 0.5rem;
+}
+
+.cap__emptySub {
+    margin-top: 0.25rem;
+}
+
+.cap__footer {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.cap__loading {
+    display: flex;
+    justify-content: center;
+    padding: 1.5rem 0;
+}
+
+.cap__drawer {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 360px;
+    max-width: calc(100vw - 2rem);
+    z-index: 30;
+    background: #fff;
+    border: 1px solid #d8dde6;
+    border-radius: 1.25rem;
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.16);
+    overflow: hidden;
+}
+
+.cap__drawerHeader {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0.5rem 0.75rem 0 0.75rem;
+    min-height: 2.25rem;
+    background: #fff;
+}
+
+.cap__drawerBody {
+    padding: 0.5rem 1.35rem 1rem 1.35rem;
+    max-height: 68vh;
+    overflow-y: auto;
+}
+
+.cap__drawerBody::-webkit-scrollbar {
+    width: 8px;
+}
+
+.cap__drawerBody::-webkit-scrollbar-thumb {
+    background: #c9c7c5;
+    border-radius: 999px;
+}
+
+.cap__drawerBody::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.cap__filterGroup {
+    margin-bottom: 1.5rem;
+}
+
+.cap__filterTitle {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #5f5c5b;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+}
+
+.cap__filterGroup .slds-radio_button-group,
+.cap__filterGroup .slds-form-element__control {
+    width: 100%;
+}
+
+.cap__filterGroup lightning-radio-group {
+    display: block;
+}
+
+.cap__filterGroup--two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 2rem;
+    row-gap: 0.65rem;
+}
+
+.cap__filterGroup lightning-input {
+    display: block;
+    margin-bottom: 0.45rem;
+}
+
+.cap__drawerFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.70rem;
+    padding: 0.875rem 1rem 1rem 1rem;
+    border-top: 1px solid #e5e5e5;
+    background: #ffffff;
+}
+
+.cap__drawerFooterRight {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+@media (max-width: 768px) {
+    .cap__drawer {
+        width: min(92vw, 360px);
+        right: 0.5rem;
+        top: 0.5rem;
+    }
+
+    .cap__drawerFooter {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .cap__drawerFooterRight {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}

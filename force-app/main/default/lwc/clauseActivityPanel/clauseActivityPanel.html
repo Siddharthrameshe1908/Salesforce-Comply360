@@ -1,0 +1,244 @@
+<template>
+    <div class="cap">
+        <!-- <div class="cap__topActions">
+            <lightning-button label="New Task" icon-name="utility:add" onclick={openNewTaskModal}>
+            </lightning-button>
+        </div> -->
+
+        <div class="cap__header">
+            <div class="cap__filtersText">
+                Filters: {dateRangeLabel} • {activityScopeLabel} • {activityTypesLabel}
+            </div>
+
+            <div class="cap__headerActions">
+                <a href="javascript:void(0)" onclick={handleRefresh}>Refresh</a>
+                <span>•</span>
+                <a href="javascript:void(0)" onclick={handleToggleExpandAll}>{expandAllLabel}</a>
+                <span>•</span>
+                <a href="javascript:void(0)" onclick={handleShowAllActivities}>View All</a>
+
+                <lightning-button-icon icon-name="utility:settings" alternative-text="Filters" title="Filters"
+                    onclick={openFilters} class="slds-m-left_small">
+                </lightning-button-icon>
+            </div>
+        </div>
+
+        <template if:true={isLoading}>
+            <div class="cap__loading">
+                <lightning-spinner size="small" alternative-text="Loading activities"></lightning-spinner>
+            </div>
+        </template>
+
+        <template if:false={isLoading}>
+            <div class="cap__section">
+                <div class="cap__sectionHeader" onclick={toggleUpcomingSection}>
+                    <lightning-icon icon-name={upcomingSectionIcon} size="x-small" class="cap__sectionChevron">
+                    </lightning-icon>
+                    <span>Upcoming &amp; Overdue</span>
+                </div>
+
+                <template if:true={isUpcomingSectionOpen}>
+                    <template if:true={hasUpcomingItems}>
+                        <div class="cap__items">
+                            <template for:each={upcomingItems} for:item="item">
+                                <c-clause-activity-item key={item.id} item={item} expanded-all={areAllExpanded} onrefresh={handleRefresh}>
+                                </c-clause-activity-item>
+                            </template>
+                        </div>
+                    </template>
+
+                    <template if:false={hasUpcomingItems}>
+                        <div class="cap__empty">
+                            <div>No activities to show.</div>
+                            <div class="cap__emptySub">
+                                Get started by creating a task, event, or email activity.
+                            </div>
+                        </div>
+                    </template>
+                </template>
+            </div>
+
+            <template for:each={historyGroups} for:item="group">
+                <div key={group.key} class="cap__section">
+                    <div class="cap__sectionHeader">
+                        <lightning-icon icon-name="utility:chevrondown" size="x-small" class="cap__sectionChevron">
+                        </lightning-icon>
+                        <span>{group.label}</span>
+                    </div>
+
+                    <div class="cap__items">
+                        <template for:each={group.items} for:item="item">
+                            <c-clause-activity-item key={item.id} item={item} expanded-all={areAllExpanded} onrefresh={handleRefresh}>
+                            </c-clause-activity-item>
+                        </template>
+                    </div>
+                </div>
+            </template>
+
+            <template if:true={showAllButton}>
+                <div class="cap__footer">
+                    <lightning-button label="Show All Activities" variant="brand" onclick={handleShowAllActivities}>
+                    </lightning-button>
+                </div>
+            </template>
+        </template>
+
+        <template if:true={isFilterPanelOpen}>
+            <section class="cap__drawer slds-card">
+                <div class="cap__drawerHeader">
+                    <span></span>
+                    <lightning-button-icon icon-name="utility:close" alternative-text="Close" onclick={closeFilters}>
+                    </lightning-button-icon>
+                </div>
+
+                <div class="cap__drawerBody">
+                    <div class="cap__filterGroup">
+                        <div class="cap__filterTitle">Date Range</div>
+                        <div class="cap__filterGroup--two-col">
+                            <lightning-input type="radio" name="dateRange" label="All time" value="all"
+                                checked={isDraftDateRangeAll} onchange={handleDraftDateRangeManual}>
+                            </lightning-input>
+
+                            <lightning-input type="radio" name="dateRange" label="Last 7 days" value="last7"
+                                checked={isDraftDateRangeLast7} onchange={handleDraftDateRangeManual}>
+                            </lightning-input>
+
+                            <lightning-input type="radio" name="dateRange" label="Next 7 days" value="next7"
+                                checked={isDraftDateRangeNext7} onchange={handleDraftDateRangeManual}>
+                            </lightning-input>
+
+                            <lightning-input type="radio" name="dateRange" label="Last 30 days" value="last30"
+                                checked={isDraftDateRangeLast30} onchange={handleDraftDateRangeManual}>
+                            </lightning-input>
+                        </div>
+                    </div>
+
+                    <div class="cap__filterGroup">
+                        <div class="cap__filterTitle">Activities To Show</div>
+                        <div class="cap__filterGroup--two-col">
+                            <lightning-input type="radio" name="activityScope" label="All activities" value="all"
+                                checked={isDraftScopeAll} onchange={handleDraftScopeManual}>
+                            </lightning-input>
+
+                            <lightning-input type="radio" name="activityScope" label="My activities" value="mine"
+                                checked={isDraftScopeMine} onchange={handleDraftScopeManual}>
+                            </lightning-input>
+                        </div>
+                    </div>
+
+                    <div class="cap__filterGroup">
+                        <div class="cap__filterTitle">Activity Type</div>
+                        <div class="cap__filterGroup--two-col">
+                            <lightning-input type="checkbox" label="All types" checked={draftFilters.includeAllTypes}
+                                onchange={handleDraftAllTypesChange}>
+                            </lightning-input>
+
+                            <lightning-input type="checkbox" label="Logged calls"
+                                checked={draftFilters.includeLoggedCalls} onchange={handleDraftLoggedCallsChange}>
+                            </lightning-input>
+
+                            <lightning-input type="checkbox" label="Email" checked={draftFilters.includeEmail}
+                                onchange={handleDraftEmailChange}>
+                            </lightning-input>
+
+                            <lightning-input type="checkbox" label="Tasks" checked={draftFilters.includeTasks}
+                                onchange={handleDraftTasksChange}>
+                            </lightning-input>
+
+                            <lightning-input type="checkbox" label="Events" checked={draftFilters.includeEvents}
+                                onchange={handleDraftEventsChange}>
+                            </lightning-input>
+
+                            <lightning-input type="checkbox" label="Web" checked={draftFilters.includeWeb}
+                                onchange={handleDraftWebChange}>
+                            </lightning-input>
+
+                            <lightning-input type="checkbox" label="List email" checked={draftFilters.includeListEmail}
+                                onchange={handleDraftListEmailChange}>
+                            </lightning-input>
+                        </div>
+                    </div>
+
+                    <div class="cap__filterGroup">
+                        <div class="cap__filterTitle">Sort Upcoming &amp; Overdue Activities</div>
+                        <div>
+                            <lightning-input type="radio" name="sortDirection" label="Oldest dates first" value="oldest"
+                                checked={isDraftSortOldest} onchange={handleDraftSortManual}>
+                            </lightning-input>
+
+                            <lightning-input type="radio" name="sortDirection" label="Newest dates first" value="newest"
+                                checked={isDraftSortNewest} onchange={handleDraftSortManual}>
+                            </lightning-input>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cap__drawerFooter">
+                    <lightning-button class="cap__btn cap__btn--neutral" label="Restore Defaults"
+                        onclick={restoreDefaults}>
+                    </lightning-button>
+
+                    <div class="cap__drawerFooterRight">
+                        <lightning-button class="cap__btn cap__btn--neutral" label="Apply & Save"
+                            onclick={applyFilters}>
+                        </lightning-button>
+
+                        <lightning-button class="cap__btn cap__btn--brand" label="Apply" variant="brand"
+                            onclick={applyFilters}>
+                        </lightning-button>
+                    </div>
+                </div>
+            </section>
+
+            <div class="cap__backdrop" onclick={closeFilters}></div>
+        </template>
+
+        <!-- <template if:true={isNewTaskModalOpen}>
+            <section role="dialog" tabindex="-1" aria-modal="true" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <lightning-button-icon icon-name="utility:close" alternative-text="Close"
+                            onclick={closeNewTaskModal} class="slds-modal__close">
+                        </lightning-button-icon>
+                        <h2 class="slds-text-heading_medium">New Task</h2>
+                    </header>
+
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <lightning-combobox label="Subject" value={newTask.subject} options={subjectOptions}
+                            onchange={handleSubjectChange} required>
+                        </lightning-combobox>
+
+                        <lightning-input type="date" label="Due Date" value={newTask.activityDate}
+                            onchange={handleDueDateChange} class="slds-m-top_small">
+                        </lightning-input>
+
+                        <lightning-combobox label="Priority" value={newTask.priority} options={priorityOptions}
+                            onchange={handlePriorityChange} class="slds-m-top_small" required>
+                        </lightning-combobox>
+
+                        <lightning-combobox label="Status" value={newTask.status} options={statusOptions}
+                            onchange={handleStatusChange} class="slds-m-top_small" required>
+                        </lightning-combobox>
+
+                        <lightning-combobox label="Assigned To" value={newTask.ownerId} options={ownerOptions}
+                            onchange={handleOwnerChange} class="slds-m-top_small" required>
+                        </lightning-combobox>
+
+                        <lightning-textarea label="Comments" value={newTask.description}
+                            onchange={handleDescriptionChange} class="slds-m-top_small">
+                        </lightning-textarea>
+                    </div>
+
+                    <footer class="slds-modal__footer">
+                        <lightning-button label="Cancel" onclick={closeNewTaskModal} class="slds-m-right_small">
+                        </lightning-button>
+
+                        <lightning-button variant="brand" label="Save" onclick={saveNewTask}>
+                        </lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template> -->
+    </div>
+</template>

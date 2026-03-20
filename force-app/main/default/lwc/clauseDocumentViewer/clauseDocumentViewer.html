@@ -1,0 +1,88 @@
+<template>
+    <div class="doc-viewer slds-card">
+        <!-- Top tabs like Figma -->
+        <div class="doc-viewer__tabs">
+            <button class="doc-viewer__tab doc-viewer__tab--active" type="button">
+                Version 1
+            </button>
+            <button class="doc-viewer__tab" type="button">
+                Version 2
+            </button>
+            <button class="doc-viewer__tab" type="button">
+                Version 3
+            </button>
+        </div>
+
+        <!-- Header -->
+        <div class="doc-viewer__header">
+            <div class="doc-viewer__meta">
+                <div class="doc-viewer__title">{documentTitle}</div>
+                <div class="doc-viewer__subtext">
+                    Version {documentVersion} • {documentDate} • Page 1 of 12
+                </div>
+            </div>
+
+            <div class="doc-viewer__tools">
+                <lightning-button-icon
+                    icon-name="utility:search"
+                    alternative-text="Search"
+                    variant="border-filled">
+                </lightning-button-icon>
+
+                <div class="doc-viewer__zoom">75%</div>
+
+                <lightning-button-icon
+                    icon-name="utility:zoomin"
+                    alternative-text="Zoom in"
+                    variant="border-filled">
+                </lightning-button-icon>
+
+                <lightning-button-icon
+                    icon-name="utility:zoomout"
+                    alternative-text="Zoom out"
+                    variant="border-filled">
+                </lightning-button-icon>
+
+                <lightning-button-icon
+                    icon-name="utility:download"
+                    alternative-text="Download"
+                    variant="border-filled"
+                    onclick={handleDownload}>
+                </lightning-button-icon>
+
+                <lightning-button-icon
+                    icon-name="utility:expand"
+                    alternative-text="Open"
+                    variant="border-filled"
+                    onclick={handleOpenInNewTab}>
+                </lightning-button-icon>
+            </div>
+        </div>
+
+        <!-- Body -->
+        <div class="doc-viewer__body">
+            <!-- Left bookmarks panel -->
+            <aside class="doc-viewer__sidebar">
+                <div class="doc-viewer__sidebar-title">Bookmarks</div>
+
+                <ul class="doc-viewer__bookmark-list">
+                    <template for:each={bookmarks} for:item="item">
+                        <li key={item.id} class={item.className}>
+                            <span class="doc-viewer__bookmark-label">{item.label}</span>
+                            <span class="doc-viewer__bookmark-page">{item.page}</span>
+                        </li>
+                    </template>
+                </ul>
+            </aside>
+
+            <!-- PDF area -->
+            <div class="doc-viewer__content">
+                <iframe
+                    class="doc-viewer__iframe"
+                    src={pdfUrl}
+                    title="Compliance document viewer">
+                </iframe>
+            </div>
+        </div>
+    </div>
+</template>

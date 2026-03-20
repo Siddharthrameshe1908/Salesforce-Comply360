@@ -1,0 +1,70 @@
+:host {
+    display: block;
+}
+
+.cimc {
+    padding: 1rem;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.cimc__editorWrap {
+    position: relative;
+}
+
+.cimc__editor {
+    min-height: 120px;
+    border: 1px solid #d8dde6;
+    border-radius: 0.25rem;
+    background: #fff;
+    padding: 0.75rem;
+    outline: none;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.cimc__placeholder {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    color: #8e8e8e;
+    pointer-events: none;
+}
+
+.cimc__suggestions {
+    list-style: none;
+    margin: 0.25rem 0 0;
+    padding: 0;
+    position: absolute;
+    z-index: 20;
+    background: #fff;
+    border: 1px solid #d8dde6;
+    border-radius: 0.25rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    width: 260px;
+    max-height: 220px;
+    overflow-y: auto;
+}
+
+.cimc__suggestion {
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+}
+
+.cimc__suggestion:hover {
+    background: #f3f3f3;
+}
+
+.mention-token {
+    display: inline-block;
+    background: #eaf5ff;
+    color: #0176d3;
+    padding: 0 0.25rem;
+    margin: 0 0.1rem;
+    border-radius: 0.25rem;
+}
+
+.cimc__actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.75rem;
+}

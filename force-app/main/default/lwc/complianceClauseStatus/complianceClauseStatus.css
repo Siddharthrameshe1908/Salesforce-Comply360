@@ -1,0 +1,167 @@
+.clause-status-card {
+    --slds-c-card-body-spacing-block-start: 0;
+    --slds-c-card-body-spacing-block-end: 0;
+    --slds-c-card-body-spacing-inline-start: 0;
+    --slds-c-card-body-spacing-inline-end: 0;
+}
+
+.clause-status-card__title {
+    padding-left: 1rem;
+    padding-top: 0.75rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #032d60;
+}
+
+.status-card-wrap {
+    padding: 1rem;
+    min-height: 19.7rem;
+    display: flex;
+    align-items: center;
+}
+
+.chart-layout {
+    display: grid;
+    grid-template-columns: 1fr 0.5fr;
+    align-items: center;
+    width: 100%;
+    column-gap: 1.5rem;
+}
+
+.chart-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.chart-canvas-wrap {
+    position: relative;
+    width: 220px;
+    height: 220px;
+}
+
+.statusChart {
+    width: 220px !important;
+    height: 220px !important;
+}
+
+.chart-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.chart-total {
+    font-size: 2.2rem;
+    line-height: 1;
+    color: #181818;
+    font-weight: 500;
+}
+
+.chart-total-label {
+    margin-top: 0.3rem;
+    font-size: 0.72rem;
+    color: #706e6b;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.status-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    justify-content: center;
+}
+
+.status-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.legend-dot {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.legend-dot_draft {
+    background: #a9a9a9;
+}
+
+.legend-dot_approved {
+    background: #1b96ff;
+}
+
+.legend-dot_suspended {
+    background: #e5a4a9;
+}
+
+.legend-dot_inreview {
+    background: #f59d3d;
+}
+
+.legend-dot_enforced {
+    background: #2e844a;
+}
+
+.legend-dot_obsolete {
+    background: #c9c7c5;
+}
+
+.legend-dot_default {
+    background: #c9c7c5;
+}
+
+.status-pill {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.6rem;
+    padding: 0.15rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    line-height: 1.2;
+    font-weight: 400;
+    white-space: nowrap;
+}
+
+.status-pill_draft {
+    background: #f3f2f2;
+    color: #3e3e3c;
+}
+
+.status-pill_suspended {
+    background: #f9e3e5;
+    color: #8e030f;
+}
+
+.status-pill_enforced {
+    background: #cdefe2;
+    color: #0b5f3a;
+}
+
+.status-pill_approved {
+    background: #d8ecff;
+    color: #014486;
+}
+
+.status-pill_inreview {
+    background: #fef1df;
+    color: #8a4b00;
+}
+
+.status-pill_obsolete {
+    background: #ecebea;
+    color: #514f4d;
+}
+
+.status-pill_default {
+    background: #ecebea;
+    color: #514f4d;
+}

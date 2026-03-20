@@ -1,0 +1,92 @@
+:host {
+    display: block;
+    height: 100%;
+}
+
+.task-card {
+    --slds-c-card-body-spacing-block-start: 0;
+    --slds-c-card-body-spacing-block-end: 0;
+    --slds-c-card-body-spacing-inline-start: 0;
+    --slds-c-card-body-spacing-inline-end: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.task-card__title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-left: 0.75rem;
+    padding-top: 0.5rem;
+}
+
+.task-card__title-text {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #032d60;
+}
+
+.task-card__actions {
+    padding-right: 0.75rem;
+    padding-top: 0.5rem;
+}
+
+.task-card__helper-text {
+    font-size: 0.78rem;
+    color: #706e6b;
+}
+
+.task-card__helper-text_overdue {
+    color: var(--slds-text-color_error);
+    font-weight: var(--slds-text-title_bold);
+    font-weight: 500;
+}
+
+.task-card__table-container {
+    padding: 0.25rem 0.75rem 0.5rem 0.75rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.task-card__table-container_overdue {
+    justify-content: flex-start;
+}
+
+.task-card__scroll-wrapper {
+    width: 100%;
+}
+
+.task-card__scroll-wrapper_fixed {
+    height: 255px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.task-card__scroll-wrapper_overdue {
+    border-radius: 0.35rem;
+}
+
+.task-card__empty {
+    padding: 1rem;
+    color: #706e6b;
+    font-size: 0.85rem;
+}
+
+.task-card__footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 2.7rem;
+    /* padding: 0 0 0.75rem 0; */
+    flex-shrink: 0;
+}
+
+/* Datatable styling hooks */
+.task-card {
+    --slds-c-table-color-background-header: #ffffff;
+    --slds-c-table-heading-text-color: #706e6b;
+    --slds-c-table-color-border: #e5e5e5;
+    --slds-c-table-row-hover-color-background: #f8f9fb;
+}

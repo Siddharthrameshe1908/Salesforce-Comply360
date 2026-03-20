@@ -1,0 +1,42 @@
+.metrics-wrap {
+    margin-top: 1rem;
+}
+
+.metric-card {
+    background: #ffffff;
+    border: 1px solid #dddbda;
+    border-radius: 0.25rem;
+    min-height: 6.25rem;
+    padding: 1rem;
+}
+
+.metric-label-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.metric-label {
+    font-size: 0.78rem;
+    color: #514f4d;
+    font-weight: 500;
+}
+
+.metric-value {
+    font-size: 2rem;
+    line-height: 1;
+    color: #181818;
+    margin-top: 0.85rem;
+}
+
+.metric-value_success {
+    color: #2e844a;
+}
+
+.metric-value_warning {
+    color: #dd7a01;
+}
+
+.metric-value_error {
+    color: #c23934;
+}

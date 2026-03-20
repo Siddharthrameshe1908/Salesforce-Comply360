@@ -1,0 +1,33 @@
+.dashboard-container {
+    padding: 1rem;
+    background: #f6f7f9;
+}
+
+.top-grid {
+    display: grid;
+    grid-template-columns: 1fr 2.55fr;
+    gap: 1rem;
+    margin-top: 1rem;
+    align-items: start;
+}
+
+.bottom-grid {
+    margin-top: 1rem;
+}
+
+.spinner-wrap {
+    min-height: 10rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.error-wrap {
+    padding: 1rem;
+}
+
+@media (max-width: 1024px) {
+    .top-grid {
+        grid-template-columns: 1fr;
+    }
+}

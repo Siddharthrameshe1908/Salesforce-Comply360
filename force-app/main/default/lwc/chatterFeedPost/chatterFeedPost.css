@@ -1,0 +1,120 @@
+:host {
+    display: block;
+}
+
+.cfp {
+    padding: 1rem 0;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.cfp__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.cfp__header-left {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+}
+
+.cfp__meta {
+    min-width: 0;
+}
+
+.cfp__name {
+    font-weight: 600;
+    color: #181818;
+}
+
+.cfp__time {
+    color: #5c5c5c;
+    font-size: 0.75rem;
+}
+
+.cfp__body,
+.cfp__edit-box {
+    padding-left: 2.75rem;
+    margin-top: 0.5rem;
+}
+
+.cfp__edit-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.5rem;
+}
+
+.cfp__actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-left: 2.75rem;
+    margin-top: 0.75rem;
+}
+
+.cfp__action-btn {
+    border: none;
+    background: transparent;
+    color: #0176d3;
+    cursor: pointer;
+    padding: 0;
+    font: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.cfp__action-btn:hover {
+    text-decoration: underline;
+}
+
+.cfp__icon {
+    --slds-c-icon-color-foreground-default: #0176d3;
+}
+
+.cfp__count {
+    color: #5c5c5c;
+    font-size: 0.75rem;
+}
+
+.cfp__comments {
+    margin-top: 0.75rem;
+    padding-left: 2.75rem;
+}
+
+.cfp__comment {
+    background: #f3f3f3;
+    border-radius: 0.5rem;
+    padding: 0.625rem 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.cfp__comment-header {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    margin-bottom: 0.25rem;
+}
+
+.cfp__comment-name {
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.cfp__comment-time {
+    font-size: 0.75rem;
+    color: #5c5c5c;
+}
+
+.cfp__comment-box {
+    margin-top: 0.75rem;
+    padding-left: 2.75rem;
+}
+
+.cfp__comment-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.5rem;
+}

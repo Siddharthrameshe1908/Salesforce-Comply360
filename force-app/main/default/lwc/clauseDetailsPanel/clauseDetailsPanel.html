@@ -1,0 +1,135 @@
+<template>
+    <section class="cp">
+        <template if:true={hasClause}>
+            <div class="cp__header">
+                <div class="cp__titleWrap">
+                    <div class="cp__title">{clauseName}</div>
+
+                    <div class="cp__meta">
+                        <span>Clause ID: {clauseAutoNumber}</span>
+                        <span class="cp__dot">•</span>
+                        <span>Version: {version}</span>
+                    </div>
+
+                    <div class="cp__meta">
+                        <span>Category: {category}</span>
+                        <span class="cp__dot">•</span>
+                        <span>Risk: {riskLevel}</span>
+                        <span class="cp__dot">•</span>
+                        <span>Status: {reviewStatus}</span>
+                    </div>
+                </div>
+
+                <div class="cp__actions">
+                    <lightning-button label="Review" variant="neutral"></lightning-button>
+                    <lightning-button label="Edit" variant="brand"></lightning-button>
+                    <lightning-button label="Reject" variant="destructive"></lightning-button>
+                    <lightning-button label="Approve" variant="success"></lightning-button>
+                </div>
+            </div>
+
+            <div class="cp__sectionTitle">Clause Information</div>
+
+            <div class="cp__grid">
+                <div class="cp__tile">
+                    <div class="cp__label">Clause Owner</div>
+                    <div class="cp__value">{clauseOwner}</div>
+                </div>
+
+                <div class="cp__tile">
+                    <div class="cp__label">Assigned To</div>
+                    <div class="cp__value">{assignedTo}</div>
+                </div>
+
+                <div class="cp__tile">
+                    <div class="cp__label">Reviewer</div>
+                    <div class="cp__value">{reviewer}</div>
+                </div>
+
+                <div class="cp__tile">
+                    <div class="cp__label">Due Date</div>
+                    <div class="cp__value">
+                        <lightning-formatted-date-time value={dueDate} year="numeric" month="2-digit" day="2-digit">
+                        </lightning-formatted-date-time>
+                    </div>
+                </div>
+
+                <div class="cp__tile">
+                    <div class="cp__label">Review Date</div>
+                    <div class="cp__value">
+                        <lightning-formatted-date-time value={reviewDate} year="numeric" month="2-digit" day="2-digit">
+                        </lightning-formatted-date-time>
+                    </div>
+                </div>
+
+                <div class="cp__tile">
+                    <div class="cp__label">Review Frequency</div>
+                    <div class="cp__value">{reviewFrequency}</div>
+                </div>
+
+                <div class="cp__tile">
+                    <div class="cp__label">Obligation Category</div>
+                    <div class="cp__value">{obligationCategory}</div>
+                </div>
+
+                <div class="cp__tile">
+                    <div class="cp__label">Section</div>
+                    <div class="cp__value">{section}</div>
+                </div>
+
+                <div class="cp__tile">
+                    <div class="cp__label">Page Number</div>
+                    <div class="cp__value">{pageNumber}</div>
+                </div>
+
+                <div class="cp__tile">
+                    <div class="cp__label">Clause Type</div>
+                    <div class="cp__value">{clauseType}</div>
+                </div>
+
+                <div class="cp__tile">
+                    <div class="cp__label">Created Date</div>
+                    <div class="cp__value">
+                        <lightning-formatted-date-time value={createdDate} year="numeric" month="2-digit" day="2-digit">
+                        </lightning-formatted-date-time>
+                    </div>
+                </div>
+
+                <div class="cp__tile">
+                    <div class="cp__label">Last Modified</div>
+                    <div class="cp__value">
+                        <lightning-formatted-date-time value={lastModifiedDate} year="numeric" month="2-digit"
+                            day="2-digit">
+                        </lightning-formatted-date-time>
+                    </div>
+                </div>
+
+                <div class="cp__tile">
+                    <div class="cp__label">Description</div>
+                    <div class="cp__value cp__value--wrap">{description}</div>
+                </div>
+
+                <div class="cp__tile">
+                    <div class="cp__label">Comments</div>
+                    <div class="cp__value cp__value--wrap">{comments}</div>
+                </div>
+
+                <div class="cp__tile">
+                    <div class="cp__label">Review Notes</div>
+                    <div class="cp__value cp__value--wrap">{reviewNotes}</div>
+                </div>
+
+                <div class="cp__tile cp__tile--span3">
+                    <div class="cp__label">Clause Text</div>
+                    <div class="cp__value cp__value--wrap prewrap">{clauseText}</div>
+                </div>
+            </div>
+        </template>
+
+        <template if:false={hasClause}>
+            <div class="cp__empty">
+                Select a clause from the left panel to view details.
+            </div>
+        </template>
+    </section>
+</template>

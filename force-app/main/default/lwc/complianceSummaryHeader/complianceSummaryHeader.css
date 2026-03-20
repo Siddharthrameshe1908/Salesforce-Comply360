@@ -1,0 +1,36 @@
+.summary-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 0.25rem;
+    padding: 0.9rem 1rem;
+    border: 1px solid #dddbda;
+    background: #ffffff;
+}
+
+.summary-banner_warning {
+    border-color: #f0b75d;
+    background: #fff8e5;
+}
+
+.summary-banner_success {
+    border-color: #91d8a9;
+    background: #f3fcf5;
+}
+
+.summary-banner_info {
+    border-color: #c9c7c5;
+    background: #f8f8f8;
+}
+
+.banner-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.banner-label {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: #3e3e3c;
+}

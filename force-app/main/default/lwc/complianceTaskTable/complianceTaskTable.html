@@ -1,0 +1,43 @@
+<template>
+    <lightning-card class="task-card">
+        <div slot="title" class="task-card__title">
+            <span class="task-card__title-text">{title}</span>
+            <lightning-badge label={recordCount}></lightning-badge>
+        </div>
+
+        <div slot="actions" class="task-card__actions">
+            <span class={helperTextClass}>{helperText}</span>
+        </div>
+
+        <div class={tableContainerClass}>
+            <div class={scrollWrapperClass} data-id="tableScroller" onscroll={handleTableScroll}>
+
+                <lightning-datatable key-field="taskId" data={displayRows} columns={columns} hide-checkbox-column
+                    sorted-by={sortedBy} sorted-direction={sortDirection} onsort={handleSort}>
+                </lightning-datatable>
+            </div>
+
+            <template if:true={showEmptyState}>
+                <div class="task-card__empty">
+                    No records found.
+                </div>
+            </template>
+        </div>
+
+        <template if:true={showActions}>
+            <div class="task-card__footer">
+                <template if:true={showViewMore}>
+                    <lightning-button label="View More" variant="base" onclick={handleViewMore}
+                        disabled={isLoadingMore}>
+                    </lightning-button>
+                </template>
+
+                <template if:true={showShowLess}>
+                    <lightning-button label="View Less" variant="base" onclick={handleShowLess}
+                        disabled={isLoadingMore}>
+                    </lightning-button>
+                </template>
+            </div>
+        </template>
+    </lightning-card>
+</template>

@@ -1,0 +1,14 @@
+<template>
+    <div class={bannerClass}>
+        <div class="banner-left">
+            <lightning-icon
+                icon-name="utility:warning"
+                size="x-small"
+                alternative-text="Health Status">
+            </lightning-icon>
+            <span class="banner-label">COMPLIANCE HEALTH STATUS</span>
+        </div>
+
+        <lightning-badge label={healthLabel}></lightning-badge>
+    </div>
+</template>

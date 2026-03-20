@@ -1,0 +1,33 @@
+<template>
+    <lightning-card class="clause-status-card">
+        <div slot="title" class="clause-status-card__title">
+            Clause Status
+        </div>
+
+        <div class="status-card-wrap">
+            <div class="chart-layout">
+                <div class="chart-section">
+                    <div class="chart-canvas-wrap">
+                        <canvas class="statusChart" lwc:dom="manual"></canvas>
+
+                        <div class="chart-center">
+                            <div class="chart-total">{totalClauses}</div>
+                            <div class="chart-total-label">TOTAL</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="status-summary">
+                    <template for:each={statusItemsForLegend} for:item="item">
+                        <div key={item.status} class="status-row">
+                            <span class={item.dotClass}></span>
+                            <span class={item.pillClass}>
+                                {item.count} {item.status}
+                            </span>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </lightning-card>
+</template>

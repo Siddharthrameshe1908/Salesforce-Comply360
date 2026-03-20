@@ -1,0 +1,33 @@
+:host {
+    display: block;
+}
+
+.uct {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.uct__header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.uct__meta {
+    min-width: 0;
+}
+
+.uct__name {
+    font-weight: 600;
+    color: #181818;
+}
+
+.uct__time {
+    color: #5c5c5c;
+    font-size: 0.75rem;
+}
+
+.uct__body {
+    padding-left: 2.75rem;
+}

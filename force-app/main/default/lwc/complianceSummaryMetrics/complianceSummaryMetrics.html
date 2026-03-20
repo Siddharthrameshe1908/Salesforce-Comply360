@@ -1,0 +1,45 @@
+<template>
+    <div class="metrics-wrap">
+        <lightning-layout multiple-rows="true">
+            <lightning-layout-item size="12" medium-device-size="3" padding="around-small">
+                <div class="metric-card">
+                    <div class="metric-label-wrap">
+                        <lightning-icon icon-name="utility:description" size="x-small"></lightning-icon>
+                        <span class="metric-label">TOTAL CLAUSES</span>
+                    </div>
+                    <div class="metric-value">{totalClauses}</div>
+                </div>
+            </lightning-layout-item>
+
+            <lightning-layout-item size="12" medium-device-size="3" padding="around-small">
+                <div class="metric-card">
+                    <div class="metric-label-wrap">
+                        <lightning-icon icon-name="utility:success" size="x-small"></lightning-icon>
+                        <span class="metric-label">ENFORCED CLAUSES</span>
+                    </div>
+                    <div class="metric-value metric-value_success">{enforcedClauses}</div>
+                </div>
+            </lightning-layout-item>
+
+            <lightning-layout-item size="12" medium-device-size="3" padding="around-small">
+                <div class="metric-card">
+                    <div class="metric-label-wrap">
+                        <lightning-icon icon-name="utility:clock" size="x-small"></lightning-icon>
+                        <span class="metric-label">CLAUSES IN REVIEW</span>
+                    </div>
+                    <div class="metric-value metric-value_warning">{inReviewClauses}</div>
+                </div>
+            </lightning-layout-item>
+
+            <lightning-layout-item size="12" medium-device-size="3" padding="around-small">
+                <div class="metric-card">
+                    <div class="metric-label-wrap">
+                        <lightning-icon icon-name="utility:error" size="x-small"></lightning-icon>
+                        <span class="metric-label">OVERDUE TASKS</span>
+                    </div>
+                    <div class="metric-value metric-value_error">{overdueTasks}</div>
+                </div>
+            </lightning-layout-item>
+        </lightning-layout>
+    </div>
+</template>

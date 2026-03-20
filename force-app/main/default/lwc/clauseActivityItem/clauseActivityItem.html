@@ -1,0 +1,151 @@
+<template>
+    <div class="cai">
+        <div class="cai__chevronCol">
+            <lightning-button-icon icon-name={expandIcon} alternative-text="Expand" variant="bare" size="small"
+                onclick={toggleExpanded} class="cai__chevronBtn">
+            </lightning-button-icon>
+        </div>
+
+        <!-- <div class="cai__checkboxCol">
+            <template if:true={showCheckbox}>
+                <lightning-input
+                    type="checkbox"
+                    variant="label-hidden"
+                    checked={isCompleted}
+                    onchange={handleCheckboxChange}
+                    class="cai__checkbox">
+                </lightning-input>
+            </template>
+        </div> -->
+
+        <div class="cai__iconCol">
+            <div class="cai__timeline">
+                <lightning-icon icon-name={item.iconName} size="small"></lightning-icon>
+            </div>
+        </div>
+
+        <div class="cai__contentCol">
+            <div class="cai__titleRow">
+                <a href="javascript:void(0)" onclick={openRecord}>{item.subject}</a>
+            </div>
+
+            <div class="cai__meta">
+                <template if:true={item.isTask}>
+                    <div class="cai__metaRow">
+                        <template if:true={item.status}>
+                            <span class="cai__metaItem">
+                                <span class="cai__metaLabel">Status:</span>
+                                <span class="cai__metaValue">{item.status}</span>
+                            </span>
+                        </template>
+
+                        <template if:true={item.priority}>
+                            <span class="cai__metaSeparator">•</span>
+                            <span class="cai__metaItem">
+                                <span class="cai__metaLabel">Priority:</span>
+                                <span class="cai__metaValue">{item.priority}</span>
+                            </span>
+                        </template>
+
+                        <template if:true={item.ownerName}>
+                            <span class="cai__metaSeparator">•</span>
+                            <span class="cai__metaItem">
+                                <span class="cai__metaLabel">Assigned To:</span>
+                                <span class="cai__metaValue">{item.ownerName}</span>
+                            </span>
+                        </template>
+                    </div>
+                </template>
+
+                <template if:true={item.isEvent}>
+                    <div class="cai__metaRow">
+                        <template if:true={item.location}>
+                            <span class="cai__metaItem">
+                                <span class="cai__metaLabel">Location:</span>
+                                <span class="cai__metaValue">{item.location}</span>
+                            </span>
+                        </template>
+
+                        <template if:true={item.ownerName}>
+                            <span class="cai__metaSeparator">•</span>
+                            <span class="cai__metaItem">
+                                <span class="cai__metaLabel">Owner:</span>
+                                <span class="cai__metaValue">{item.ownerName}</span>
+                            </span>
+                        </template>
+                    </div>
+                </template>
+            </div>
+
+            <template if:true={isExpanded}>
+                <div class="cai__detailsBox">
+                    <template if:true={item.priority}>
+                        <div><span class="cai__label">Priority</span></div>
+                        <div>{item.priority}</div>
+                    </template>
+
+                    <template if:true={item.description}>
+                        <div class="cai__descTop"><span class="cai__label">Description</span></div>
+                        <div>{item.description}</div>
+                    </template>
+                </div>
+            </template>
+        </div>
+
+        <div class="cai__dateCol">
+            <div class="cai__dateBlock">
+                <div class="cai__dateLabel">Due Date</div>
+                <div class="cai__dateText">{dateText}</div>
+            </div>
+        </div>
+
+        <div class="cai__menuCol">
+            <lightning-button-menu alternative-text="Actions" icon-name="utility:down" menu-alignment="right"
+                onselect={handleMenuSelect}>
+                <template if:true={item.isTask}>
+                    <lightning-menu-item value="followupTask" label="Create Follow-Up Task"></lightning-menu-item>
+                    <lightning-menu-item value="edit" label="Edit"></lightning-menu-item>
+                    <lightning-menu-item value="changeStatus" label="Change Status"></lightning-menu-item>
+                    <lightning-menu-item value="changeDate" label="Change Date"></lightning-menu-item>
+                    <lightning-menu-item value="changePriority" label="Change Priority"></lightning-menu-item>
+                    <lightning-menu-item value="delete" label="Delete"></lightning-menu-item>
+                </template>
+
+                <template if:true={item.isEvent}>
+                    <lightning-menu-item value="followupEvent" label="Create Follow-Up Event"></lightning-menu-item>
+                    <lightning-menu-item value="edit" label="Edit"></lightning-menu-item>
+                    <lightning-menu-item value="changeDate" label="Change Date"></lightning-menu-item>
+                    <lightning-menu-item value="delete" label="Delete"></lightning-menu-item>
+                </template>
+            </lightning-button-menu>
+        </div>
+    </div>
+
+    <template if:true={isStatusModalOpen}>
+        <section role="dialog" tabindex="-1" aria-modal="true" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container cai__modalContainer">
+                <header class="slds-modal__header cai__modalHeader">
+                    <lightning-button-icon icon-name="utility:close" alternative-text="Close" onclick={closeStatusModal}
+                        class="slds-modal__close">
+                    </lightning-button-icon>
+                    <h2 class="slds-text-heading_medium">Change Status</h2>
+                </header>
+
+                <div class="slds-modal__content slds-p-around_large cai__modalBody">
+                    <lightning-combobox name="status" label="Status" value={selectedStatus} options={statusOptions}
+                        onchange={handleStatusValueChange} required>
+                    </lightning-combobox>
+                </div>
+
+                <footer class="slds-modal__footer cai__modalFooter">
+                    <lightning-button label="Cancel" onclick={closeStatusModal} class="slds-m-right_small">
+                    </lightning-button>
+
+                    <lightning-button variant="brand" label="Save" onclick={saveStatusChange}>
+                    </lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>
