@@ -12,6 +12,7 @@
     <targetConfig targets="lightning__RecordPage">
       <objects>
         <object>Compliance__c</object>
+        <object>Clause__c</object>
       </objects>
     </targetConfig>
   </targetConfigs>

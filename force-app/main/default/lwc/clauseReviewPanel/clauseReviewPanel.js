@@ -6,22 +6,30 @@ import CLAUSE_SELECTED_CHANNEL from '@salesforce/messageChannel/ClauseSelected__
 export default class ClauseReviewPanel extends LightningElement {
     @api recordId;
     @track selectedClauseId;
+    @track selectedClauseName;
     @track activeAction = null;
     @track isEditMode = false;
     @track activeTab = 'details';
+    @track viewMode = 'list';
 
     @wire(MessageContext) messageContext;
     _subscription = null;
 
     connectedCallback() {
+        this.viewMode = 'list';
+        this.selectedClauseId = undefined;
+        this.selectedClauseName = undefined;
+
         if (!this._subscription) {
             this._subscription = subscribe(
                 this.messageContext,
                 CLAUSE_SELECTED_CHANNEL,
                 (msg) => {
                     this.selectedClauseId = msg.clauseId;
+                    this.selectedClauseName = msg.clauseName || undefined;
                     this.isEditMode = false;
                     this.activeTab = 'details';
+                    this.viewMode = msg.clauseId ? 'detail' : 'list';
                 }
             );
         }
@@ -36,8 +44,20 @@ export default class ClauseReviewPanel extends LightningElement {
 
     handleClauseSelect = (event) => {
         this.selectedClauseId = event.detail.clauseId;
+        this.selectedClauseName = event.detail.clauseName || undefined;
         this.isEditMode = false;
-        // this.activeTab = 'details';
+        this.activeTab = 'details';
+        this.viewMode = 'detail';
+    };
+
+    handleBreadcrumbClick = (event) => {
+        event.preventDefault();
+        if (event.currentTarget?.name !== 'clauses') {
+            return;
+        }
+
+        this.viewMode = 'list';
+        this.isEditMode = false;
     };
 
     handleReject = () => {
@@ -57,20 +77,54 @@ export default class ClauseReviewPanel extends LightningElement {
             ? 'crp__tab-btn crp__tab-btn--active'
             : 'crp__tab-btn';
     }
+
     get activityTabClass() {
         return this.activeTab === 'activity'
             ? 'crp__tab-btn crp__tab-btn--active'
             : 'crp__tab-btn';
     }
+
     get chatterTabClass() {
         return this.activeTab === 'chatter'
             ? 'crp__tab-btn crp__tab-btn--active'
             : 'crp__tab-btn';
     }
 
-    get isDetailsTab() { return this.activeTab === 'details'; }
-    get isActivityTab() { return this.activeTab === 'activity'; }
-    get isChatterTab() { return this.activeTab === 'chatter'; }
+    get isDetailsTab() {
+        return this.activeTab === 'details';
+    }
+
+    get isActivityTab() {
+        return this.activeTab === 'activity';
+    }
+
+    get isChatterTab() {
+        return this.activeTab === 'chatter';
+    }
+
+    get isDetailMode() {
+        return this.viewMode === 'detail';
+    }
+
+    get showLeftPanel() {
+        return !this.isDetailMode;
+    }
+
+    get listPanelClass() {
+        return this.isDetailMode ? 'crp__left' : 'crp__left crp__left--full';
+    }
+
+    get detailPanelClass() {
+        return this.isDetailMode ? 'crp__detail crp__detail--expanded' : 'crp__detail';
+    }
+
+    get rightPanelClass() {
+        return this.isDetailMode ? 'crp__right crp__right--expanded' : 'crp__right';
+    }
+
+    get breadcrumbClauseLabel() {
+        return this.selectedClauseName || 'Selected Clause';
+    }
 
     handleTabClick(event) {
         this.activeTab = event.currentTarget.dataset.tab;
@@ -82,7 +136,7 @@ export default class ClauseReviewPanel extends LightningElement {
         this.dispatchEvent(
             new ShowToastEvent({
                 title: 'Success',
-                message: `Clause ${event.detail.action}d — Compliance Task created.`,
+                message: `Clause ${event.detail.action}d - Compliance Task created.`,
                 variant: 'success'
             })
         );
@@ -146,3 +200,5 @@ export default class ClauseReviewPanel extends LightningElement {
         );
     };
 }
+
+

@@ -1,7 +1,5 @@
 <template>
     <div class="clp">
-
-        <!-- ── Toolbar: search + filter icon ─────────────────────── -->
         <div class="clp__toolbar">
             <div class="clp__toolbar-title">
                 <span class="slds-text-heading_small slds-text-color_default">Clauses</span>
@@ -17,29 +15,40 @@
                         variant="label-hidden"
                         placeholder="Search clauses..."
                         value={searchText}
-                        onchange={handleSearch}>
+                        onchange={handleSearch}
+                    >
                     </lightning-input>
                 </div>
 
-                <!-- Filter icon button with active-count badge -->
                 <div class="clp__filter-btn-wrap">
+                    <lightning-formatted-text
+                        class="clp__filter-label"
+                        value="Filter"
+                    >
+                    </lightning-formatted-text>
                     <lightning-button-icon
                         icon-name="utility:filterList"
                         variant={filterBtnVariant}
                         alternative-text="Filters"
                         title="Filters"
-                        onclick={toggleFilterPopover}>
+                        onclick={toggleFilterPopover}
+                    >
                     </lightning-button-icon>
                     <template if:true={activeFilterCount}>
                         <span class="clp__filter-badge">{activeFilterCount}</span>
                     </template>
 
-                    <!-- ── Filter popover ──────────────────────── -->
                     <template if:true={isPopoverOpen}>
-                        <div class="slds-popover slds-popover_medium slds-nubbin_top-right clp__popover" role="dialog" aria-label="Filter Clauses">
-                            <button class="slds-button slds-button_icon slds-button_icon-small slds-float_right slds-popover__close"
+                        <div
+                            class="slds-popover slds-popover_medium slds-nubbin_top-right clp__popover"
+                            role="dialog"
+                            aria-label="Filter Clauses"
+                        >
+                            <button
+                                class="slds-button slds-button_icon slds-button_icon-small slds-float_right slds-popover__close"
                                 onclick={toggleFilterPopover}
-                                title="Close">
+                                title="Close"
+                            >
                                 <lightning-icon icon-name="utility:close" size="x-small" alternative-text="Close"></lightning-icon>
                             </button>
 
@@ -52,7 +61,8 @@
                                     label="Risk Level"
                                     value={draft.risk}
                                     options={riskComboOptions}
-                                    onchange={handleDraftRisk}>
+                                    onchange={handleDraftRisk}
+                                >
                                 </lightning-combobox>
 
                                 <lightning-combobox
@@ -60,7 +70,8 @@
                                     value={draft.status}
                                     options={statusComboOptions}
                                     onchange={handleDraftStatus}
-                                    class="slds-m-top_x-small">
+                                    class="slds-m-top_x-small"
+                                >
                                 </lightning-combobox>
 
                                 <lightning-combobox
@@ -68,7 +79,8 @@
                                     value={draft.domain}
                                     options={domainComboOptions}
                                     onchange={handleDraftDomain}
-                                    class="slds-m-top_x-small">
+                                    class="slds-m-top_x-small"
+                                >
                                 </lightning-combobox>
 
                                 <lightning-combobox
@@ -76,7 +88,8 @@
                                     value={draft.reviewer}
                                     options={reviewerComboOptions}
                                     onchange={handleDraftReviewer}
-                                    class="slds-m-top_x-small">
+                                    class="slds-m-top_x-small"
+                                >
                                 </lightning-combobox>
 
                                 <lightning-combobox
@@ -84,7 +97,8 @@
                                     value={draft.type}
                                     options={typeComboOptions}
                                     onchange={handleDraftType}
-                                    class="slds-m-top_x-small">
+                                    class="slds-m-top_x-small"
+                                >
                                 </lightning-combobox>
                             </div>
 
@@ -93,12 +107,14 @@
                                     <lightning-button
                                         label="Clear All"
                                         variant="base"
-                                        onclick={clearDraft}>
+                                        onclick={clearDraft}
+                                    >
                                     </lightning-button>
                                     <lightning-button
                                         label="Apply"
                                         variant="brand"
-                                        onclick={applyFilters}>
+                                        onclick={applyFilters}
+                                    >
                                     </lightning-button>
                                 </div>
                             </footer>
@@ -108,16 +124,17 @@
             </div>
         </div>
 
-        <!-- ── Active filter chips ────────────────────────────────── -->
         <template if:true={hasActiveFilters}>
             <div class="clp__chips">
                 <template for:each={activeChips} for:item="chip">
                     <span key={chip.key} class="slds-pill slds-pill_small clp__chip" title={chip.label}>
                         <span class="slds-pill__label">{chip.label}</span>
-                        <button class="slds-button slds-button_icon slds-button_icon slds-pill__remove"
+                        <button
+                            class="slds-button slds-button_icon slds-button_icon slds-pill__remove"
                             title="Remove"
                             data-key={chip.key}
-                            onclick={removeChip}>
+                            onclick={removeChip}
+                        >
                             <lightning-icon icon-name="utility:close" size="xx-small" alternative-text="Remove"></lightning-icon>
                         </button>
                     </span>
@@ -125,40 +142,60 @@
             </div>
         </template>
 
-        <!-- ── Result count ───────────────────────────────────────── -->
         <div class="clp__count">
             <span class="slds-text-body_small slds-text-color_weak">{filteredCount} clause(s)</span>
         </div>
 
-        <!-- ── Scrollable clause list ─────────────────────────────── -->
         <div class="clp__list">
-            <template for:each={visibleClauses} for:item="c">
-                <a key={c.clauseId}
-                   class={c._tileClass}
-                   data-id={c.clauseId}
-                   onclick={handleClauseClick}
-                   role="button"
-                   tabindex="0">
+            <template if:false={noResults}>
+                <lightning-datatable
+                    key-field="clauseId"
+                    data={pagedTableData}
+                    columns={columns}
+                    sorted-by={sortBy}
+                    sorted-direction={sortDirection}
+                    onsort={handleSort}
+                    onrowaction={handleRowAction}
+                    hide-checkbox-column
+                >
+                </lightning-datatable>
 
-                    <span class={c._riskDotClass} title={c.riskLevel}></span>
-
-                    <div class="clp-tile__body">
-                        <div class="clp-tile__top">
-                            <span class="slds-truncate clp-tile__name" title={c.clauseName}>{c.clauseName}</span>
-                            <span class={c._riskBadgeClass}>{c.riskLevel}</span>
+                <template if:true={showPagination}>
+                    <div class="clp__pagination">
+                        <div class="clp__pagination-info slds-text-body_small slds-text-color_weak">
+                            Showing {startRecord} - {endRecord} of {filteredCount}
                         </div>
-                        <div class="clp-tile__meta">
-                            <span class={c._statusBadgeClass}>{c.status}</span>
-                            <span class="slds-text-body_small slds-text-color_weak clp-tile__id">{c.clauseNumber}</span>
+                        <div class="clp__pagination-controls">
+                            <lightning-button
+                                label="Previous"
+                                variant="neutral"
+                                onclick={handlePreviousPage}
+                                disabled={isPreviousDisabled}
+                            >
+                            </lightning-button>
+
+                            <template for:each={pageButtons} for:item="pageItem">
+                                <lightning-button
+                                    key={pageItem.page}
+                                    label={pageItem.label}
+                                    variant={pageItem.variant}
+                                    data-page={pageItem.page}
+                                    onclick={handlePageClick}
+                                    class="clp__page-btn"
+                                >
+                                </lightning-button>
+                            </template>
+
+                            <lightning-button
+                                label="Next"
+                                variant="neutral"
+                                onclick={handleNextPage}
+                                disabled={isNextDisabled}
+                            >
+                            </lightning-button>
                         </div>
                     </div>
-                </a>
-            </template>
-
-            <template if:true={showMoreVisible}>
-                <div class="slds-align_absolute-center slds-m-vertical_small">
-                    <lightning-button label="Show More" variant="neutral" onclick={handleShowMore}></lightning-button>
-                </div>
+                </template>
             </template>
 
             <template if:true={noResults}>
@@ -170,6 +207,5 @@
                 </div>
             </template>
         </div>
-
     </div>
 </template>

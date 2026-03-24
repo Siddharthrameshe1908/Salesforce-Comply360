@@ -118,3 +118,47 @@
     justify-content: flex-end;
     margin-top: 0.5rem;
 }
+.cfp__header-right {
+    display: inline-flex;
+    align-items: center;
+}
+
+.cfp__menu-wrap {
+    position: relative;
+    display: inline-flex;
+    padding-right: 0.22rem;  
+    padding-top: 0.12rem;    
+}
+
+.cfp__bookmark-corner {
+    position: absolute;
+    top: -0.28rem;           
+    right: -0.28rem;         
+    width: 0.95rem;
+    height: 0.95rem;
+    clip-path: polygon(100% 0, 0 0, 100% 100%);
+    background: #0fa7a0;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.cfp__bookmark-corner {
+    position: absolute;
+    top: -0.15rem;
+    right: -0.15rem;
+    width: 0.95rem;
+    height: 0.95rem;
+    clip-path: polygon(100% 0, 0 0, 100% 100%);
+    background: #0fa7a0;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.cfp__bookmark-corner-icon {
+    --slds-c-icon-color-foreground-default: #ffffff;
+    position: absolute;
+    top: 0.04rem;
+    right: 0.02rem;
+    transform: scale(0.58);
+    transform-origin: top right;
+}

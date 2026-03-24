@@ -1,24 +1,34 @@
 <template>
     <div class="crp">
         <!-- Action modal -->
-        <template if:true={activeAction}>
+        <!-- <template if:true={activeAction}>
             <c-clause-action-modal clause-id={selectedClauseId} action={activeAction} onclose={closeModal}
                 ontaskcreated={handleTaskCreated}>
             </c-clause-action-modal>
+        </template> -->
+
+        <!-- Left: Clause table -->
+        <template if:true={showLeftPanel}>
+            <div class={listPanelClass}>
+                <div class="slds-card">
+                    <c-clauses-left-panel record-id={recordId} onclauseselect={handleClauseSelect}>
+                    </c-clauses-left-panel>
+                </div>
+            </div>
         </template>
 
-        <!-- Left: Clause list -->
-        <div class="crp__left">
-            <div class="slds-card">
-                <c-clauses-left-panel record-id={recordId} onclauseselect={handleClauseSelect}>
-                </c-clauses-left-panel>
-            </div>
-        </div>
-
-        <!-- Middle: Clause detail / activity / chatter -->
-        <div class="crp__detail">
-            <template if:true={selectedClauseId}>
-                <div class="slds-card crp__detail-card">
+        <template if:true={isDetailMode}>
+            <!-- Middle: Clause detail / activity / chatter -->
+            <div class={detailPanelClass}>
+                <div class="crp__breadcrumbs">
+                    <lightning-breadcrumbs>
+                        <lightning-breadcrumb label="Clauses" name="clauses" onclick={handleBreadcrumbClick}>
+                        </lightning-breadcrumb>
+                        <lightning-breadcrumb label={breadcrumbClauseLabel}></lightning-breadcrumb>
+                    </lightning-breadcrumbs>
+                </div>
+                <template if:true={selectedClauseId}>
+                    <div class="slds-card crp__detail-card">
 
                     <!-- ── FIXED TAB HEADER ── -->
                     <div class="crp__tab-header">
@@ -41,14 +51,14 @@
                         <!-- DETAILS TAB -->
                         <template if:true={isDetailsTab}>
                             <div class="crp__tab-pane">
-                                <div class="crp__actions">
+                                <!-- <div class="crp__actions">
                                     <lightning-button label="Reject" variant="destructive" onclick={handleReject}
                                         class="slds-m-left_x-small">
                                     </lightning-button>
                                     <lightning-button label="Approve" variant="brand" onclick={handleApprove}
                                         class="slds-m-left_x-small">
                                     </lightning-button>
-                                </div>
+                                </div> -->
 
                                 <div class="crp__record-wrap slds-p-horizontal_medium slds-p-bottom_medium">
 
@@ -100,7 +110,7 @@
                                                         <div class="crp-field__main">
                                                             <div class="crp-field__value">
                                                                 <lightning-output-field
-                                                                    field-name="devcomply360__Clause_Text__c">
+                                                                    field-name="devcomply360__Clause_Lifecycle_Status__c">
                                                                 </lightning-output-field>
                                                             </div>
                                                         </div>
@@ -396,7 +406,7 @@
                                                         <div class="crp-field__main">
                                                             <div class="crp-field__value">
                                                                 <lightning-output-field
-                                                                    field-name="devcomply360__Clause_Lifecycle_Status__c">
+                                                                    field-name="devcomply360__Clause_Text__c">
                                                                 </lightning-output-field>
                                                             </div>
                                                         </div>
@@ -444,7 +454,7 @@
                                                     </div>
                                                     <div class="crp-field">
                                                         <lightning-input-field
-                                                            field-name="devcomply360__Clause_Text__c">
+                                                            field-name="devcomply360__Clause_Lifecycle_Status__c">
                                                         </lightning-input-field>
                                                     </div>
                                                 </div>
@@ -534,7 +544,7 @@
                                                     </div>
                                                     <div class="crp-field">
                                                         <lightning-input-field
-                                                            field-name="devcomply360__Clause_Lifecycle_Status__c">
+                                                            field-name="devcomply360__Clause_Text__c">
                                                         </lightning-input-field>
                                                     </div>
                                                 </div>
@@ -568,22 +578,27 @@
                         </template>
 
                     </div>
-                </div>
-            </template>
-
-            <template if:false={selectedClauseId}>
-                <div class="slds-card">
-                    <div class="slds-align_absolute-center slds-p-around_large">
-                        <p class="slds-text-body_regular slds-text-color_weak">Select a clause from the list.</p>
                     </div>
-                </div>
-            </template>
-        </div>
+                </template>
 
-        <!-- Right: Document viewer -->
-        <div class="crp__right">
-            <c-clause-document-viewer record-id={recordId} document-name="Compliance Document.pdf">
-            </c-clause-document-viewer>
-        </div>
+                <template if:false={selectedClauseId}>
+                    <div class="slds-card">
+                        <div class="slds-align_absolute-center slds-p-around_large">
+                            <p class="slds-text-body_regular slds-text-color_weak">Select a clause from the table.</p>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Right: Document viewer -->
+            <div class={rightPanelClass}>
+                <c-clause-document-viewer clause-id={selectedClauseId}>
+                </c-clause-document-viewer>
+            </div>
+        </template>
     </div>
 </template>
+
+
+
+

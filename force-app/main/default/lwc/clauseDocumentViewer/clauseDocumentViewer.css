@@ -30,7 +30,7 @@
     border-radius: 0.4rem 0.4rem 0 0;
     font-size: 0.85rem;
     font-weight: 600;
-    cursor: default;
+    cursor: pointer;
 }
 
 .doc-viewer__tab--active {
@@ -153,6 +153,7 @@
 
 /* PDF content */
 .doc-viewer__content {
+    position: relative;
     flex: 1;
     min-width: 0;
     min-height: 0;
@@ -168,6 +169,40 @@
     border-radius: 0.5rem;
     background: #fff;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.doc-viewer__iframe--loading {
+    opacity: 0;
+}
+
+.doc-viewer__state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+    font-size: 0.9rem;
+    border: 1px dashed #c9c9c9;
+    border-radius: 0.5rem;
+    background: #fff;
+    padding: 1rem;
+}
+
+.doc-viewer__overlay {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    left: 1rem;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 0.9rem;
+    border: 1px dashed #c9c9c9;
+    border-radius: 0.5rem;
+    background: rgba(255, 255, 255, 0.92);
 }
 
 @media (max-width: 1200px) {

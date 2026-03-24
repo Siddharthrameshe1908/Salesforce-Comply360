@@ -16,11 +16,18 @@
             </div>
 
             <div class="cfp__header-right">
-                <lightning-button-menu alternative-text="Actions" icon-name="utility:down" menu-alignment="right" onselect={handleMenuSelect}>
+                <div class="cfp__menu-wrap">
+                    <template if:true={localIsBookmarked}>
+                        <span class="cfp__bookmark-corner" title="Bookmarked" aria-label="Bookmarked">
+                            <lightning-icon icon-name="utility:favorite" size="xx-small" class="cfp__bookmark-corner-icon"></lightning-icon>
+                        </span>
+                    </template>
+                <lightning-button-menu alternative-text="Actions" icon-name="utility:down" icon-size="x-small" menu-alignment="right" onselect={handleMenuSelect}>
                     <lightning-menu-item value="edit" label="Edit"></lightning-menu-item>
                     <lightning-menu-item value="bookmark" label={bookmarkLabel}></lightning-menu-item>
                     <lightning-menu-item value="delete" label="Delete"></lightning-menu-item>
                 </lightning-button-menu>
+                </div>
             </div>
         </div>
 

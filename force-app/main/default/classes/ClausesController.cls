@@ -42,7 +42,7 @@ public with sharing class ClausesController {
                    Name,
                    devcomply360__Clause_ID__c,
                    devcomply360__Risk_Level__c,
-                   devcomply360__Review_Status__c,
+                   devcomply360__Clause_Lifecycle_Status__c,
                    devcomply360__Reviewer__c,
                    devcomply360__Clause_Type__c,
                    devcomply360__Source_Compliance__r.devcomply360__Industry_Domain__c
@@ -58,7 +58,7 @@ public with sharing class ClausesController {
             dto.clauseNumber = (String)c.devcomply360__Clause_ID__c; // CL-00011
             dto.clauseName = c.Name;
             dto.riskLevel = (String)c.devcomply360__Risk_Level__c;
-            dto.status = (String)c.devcomply360__Review_Status__c;
+            dto.status = (String)c.devcomply360__Clause_Lifecycle_Status__c;
             dto.reviewer = (String)c.devcomply360__Reviewer__c;
             dto.type = (String)c.devcomply360__Clause_Type__c;
 

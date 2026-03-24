@@ -3,12 +3,21 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 import addComment from '@salesforce/apex/ClauseChatterController.addComment';
 import likePost from '@salesforce/apex/ClauseChatterController.likePost';
+import unlikePost from '@salesforce/apex/ClauseChatterController.unlikePost';
 import deletePost from '@salesforce/apex/ClauseChatterController.deletePost';
 import editPost from '@salesforce/apex/ClauseChatterController.editPost';
 import bookmarkPost from '@salesforce/apex/ClauseChatterController.bookmarkPost';
 
 export default class ChatterFeedPost extends LightningElement {
-    @api post;
+    _post;
+    @api
+    get post() {
+        return this._post;
+    }
+    set post(value) {
+        this._post = value;
+        this.syncLocalStateFromPost();
+    }
 
     @track isCommentBoxOpen = false;
     @track commentBody = '';
@@ -21,10 +30,7 @@ export default class ChatterFeedPost extends LightningElement {
     localIsBookmarked = false;
 
     connectedCallback() {
-        this.localIsLiked = !!this.post?.IsLikedByMe;
-        this.localLikeCount = this.post?.LikeCount || 0;
-        this.localIsBookmarked = !!this.post?.IsBookmarkedByMe;
-        this.editBody = this.post?.Body || '';
+        this.syncLocalStateFromPost();
     }
 
     get createdByName() {
@@ -150,7 +156,7 @@ export default class ChatterFeedPost extends LightningElement {
         this.isBusy = true;
         try {
             if (this.localIsLiked) {
-                // UI-only unlike for now
+                await unlikePost({ feedItemId: this.post.Id });
                 this.localIsLiked = false;
                 this.localLikeCount = Math.max((this.localLikeCount || 1) - 1, 0);
             } else {
@@ -158,6 +164,8 @@ export default class ChatterFeedPost extends LightningElement {
                 this.localIsLiked = true;
                 this.localLikeCount = (this.localLikeCount || 0) + 1;
             }
+
+            this.dispatchEvent(new CustomEvent('refreshfeed'));
         } catch (error) {
             this.showToast('Error', this.reduceError(error), 'error');
         } finally {
@@ -184,9 +192,10 @@ export default class ChatterFeedPost extends LightningElement {
                 this.localIsBookmarked = newState;
                 this.showToast(
                     'Success',
-                    newState ? 'Post bookmarked.' : 'Bookmark removed.',
+                    newState ? 'Bookmark was added.' : 'Bookmark was removed.',
                     'success'
                 );
+                this.dispatchEvent(new CustomEvent('refreshfeed'));
             } catch (error) {
                 this.showToast('Error', this.reduceError(error), 'error');
             } finally {
@@ -209,12 +218,13 @@ export default class ChatterFeedPost extends LightningElement {
         }
     }
 
-    showToast(title, message, variant) {
+    showToast(title, message, variant, mode = 'dismissable') {
         this.dispatchEvent(
             new ShowToastEvent({
                 title,
                 message,
-                variant
+                variant,
+                mode
             })
         );
     }
@@ -225,4 +235,15 @@ export default class ChatterFeedPost extends LightningElement {
         }
         return error?.body?.message || error?.message || 'Unknown error';
     }
+
+    syncLocalStateFromPost() {
+        this.localIsLiked = !!this.post?.IsLikedByMe;
+        this.localLikeCount = this.post?.LikeCount || 0;
+        this.localIsBookmarked = !!this.post?.IsBookmarkedByMe;
+
+        if (!this.isEditMode) {
+            this.editBody = this.post?.Body || '';
+        }
+    }
 }
+

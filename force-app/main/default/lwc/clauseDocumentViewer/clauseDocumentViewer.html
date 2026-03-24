@@ -1,32 +1,32 @@
 <template>
     <div class="doc-viewer slds-card">
-        <!-- Top tabs like Figma -->
         <div class="doc-viewer__tabs">
-            <button class="doc-viewer__tab doc-viewer__tab--active" type="button">
-                Version 1
-            </button>
-            <button class="doc-viewer__tab" type="button">
-                Version 2
-            </button>
-            <button class="doc-viewer__tab" type="button">
-                Version 3
-            </button>
+            <template for:each={tabItems} for:item="tab">
+                <button
+                    key={tab.label}
+                    class={tab.className}
+                    type="button"
+                    data-tab={tab.label}
+                    onclick={handleTabClick}>
+                    {tab.label}
+                </button>
+            </template>
         </div>
 
-        <!-- Header -->
         <div class="doc-viewer__header">
             <div class="doc-viewer__meta">
                 <div class="doc-viewer__title">{documentTitle}</div>
                 <div class="doc-viewer__subtext">
-                    Version {documentVersion} • {documentDate} • Page 1 of 12
+                    Version {documentVersion} | {documentDate}
                 </div>
             </div>
 
             <div class="doc-viewer__tools">
-                <lightning-button-icon
+                <!-- <lightning-button-icon
                     icon-name="utility:search"
                     alternative-text="Search"
-                    variant="border-filled">
+                    variant="border-filled"
+                    disabled>
                 </lightning-button-icon>
 
                 <div class="doc-viewer__zoom">75%</div>
@@ -34,34 +34,36 @@
                 <lightning-button-icon
                     icon-name="utility:zoomin"
                     alternative-text="Zoom in"
-                    variant="border-filled">
+                    variant="border-filled"
+                    disabled>
                 </lightning-button-icon>
 
                 <lightning-button-icon
                     icon-name="utility:zoomout"
                     alternative-text="Zoom out"
-                    variant="border-filled">
-                </lightning-button-icon>
+                    variant="border-filled"
+                    disabled>
+                </lightning-button-icon> -->
 
                 <lightning-button-icon
                     icon-name="utility:download"
                     alternative-text="Download"
                     variant="border-filled"
-                    onclick={handleDownload}>
+                    onclick={handleDownload}
+                    disabled={showEmptyState}>
                 </lightning-button-icon>
 
                 <lightning-button-icon
                     icon-name="utility:expand"
                     alternative-text="Open"
                     variant="border-filled"
-                    onclick={handleOpenInNewTab}>
+                    onclick={handleOpenInNewTab}
+                    disabled={showEmptyState}>
                 </lightning-button-icon>
             </div>
         </div>
 
-        <!-- Body -->
         <div class="doc-viewer__body">
-            <!-- Left bookmarks panel -->
             <aside class="doc-viewer__sidebar">
                 <div class="doc-viewer__sidebar-title">Bookmarks</div>
 
@@ -75,13 +77,27 @@
                 </ul>
             </aside>
 
-            <!-- PDF area -->
             <div class="doc-viewer__content">
-                <iframe
-                    class="doc-viewer__iframe"
-                    src={pdfUrl}
-                    title="Compliance document viewer">
-                </iframe>
+                <template if:true={isLoading}>
+                    <div class="doc-viewer__state slds-text-color_weak">Loading documents...</div>
+                </template>
+
+                <template if:true={showEmptyState}>
+                    <div class="doc-viewer__state slds-text-color_weak">{emptyStateMessage}</div>
+                </template>
+
+                <template if:true={hasActiveDocument}>
+                    <iframe
+                        class={iframeClass}
+                        src={activePdfUrl}
+                        title="Compliance document viewer"
+                        onload={handleIframeLoad}>
+                    </iframe>
+                </template>
+
+                <template if:true={showFrameLoader}>
+                    <div class="doc-viewer__overlay slds-text-color_weak">Loading document preview...</div>
+                </template>
             </div>
         </div>
     </div>

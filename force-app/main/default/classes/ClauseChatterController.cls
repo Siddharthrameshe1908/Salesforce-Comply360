@@ -39,7 +39,7 @@ public with sharing class ClauseChatterController {
         }
 
         String soql =
-            'SELECT Id, ParentId, Body, Type, CreatedDate, CreatedBy.Id, CreatedBy.Name ' +
+            'SELECT Id, ParentId, Body, Type, CreatedDate, CreatedBy.Id, CreatedBy.Name, LikeCount ' +
             'FROM FeedItem ' +
             'WHERE ParentId = :recordId ' +
             'AND Type = \'TextPost\' ' +
@@ -77,6 +77,19 @@ public with sharing class ClauseChatterController {
             commentsByPostId.get(fc.FeedItemId).add(c);
         }
 
+        Map<Id, ConnectApi.FeedElement> feedElementById = new Map<Id, ConnectApi.FeedElement>();
+        String networkId = Network.getNetworkId();
+        for (FeedItem item : feedItems) {
+            try {
+                feedElementById.put(
+                    item.Id,
+                    ConnectApi.ChatterFeeds.getFeedElement(networkId, item.Id)
+                );
+            } catch (Exception ex) {
+                // Non-blocking: if enrichment fails, we still return base feed data.
+            }
+        }
+
         List<FeedPostWrapper> results = new List<FeedPostWrapper>();
         for (FeedItem item : feedItems) {
             FeedPostWrapper w = new FeedPostWrapper();
@@ -87,9 +100,24 @@ public with sharing class ClauseChatterController {
             w.CreatedDate = item.CreatedDate;
             w.CreatedById = item.CreatedById;
             w.CreatedByName = item.CreatedBy.Name;
-            w.LikeCount = 0;
+            w.LikeCount = item.LikeCount == null ? 0 : item.LikeCount;
             w.IsLikedByMe = false;
             w.IsBookmarkedByMe = false;
+
+            if (feedElementById.containsKey(item.Id)) {
+                Map<String, Object> feedElementMap =
+                    (Map<String, Object>) JSON.deserializeUntyped(
+                        JSON.serialize(feedElementById.get(item.Id))
+                    );
+
+                w.IsLikedByMe =
+                    extractBoolean(feedElementMap, new List<String>{ 'capabilities', 'chatterLikes', 'isLikedByCurrentUser' }) ||
+                    extractMap(feedElementMap, new List<String>{ 'capabilities', 'chatterLikes', 'myLike' }) != null;
+
+                w.IsBookmarkedByMe =
+                    extractBoolean(feedElementMap, new List<String>{ 'capabilities', 'bookmarks', 'isBookmarkedByCurrentUser' });
+            }
+
             w.Comments = commentsByPostId.containsKey(item.Id)
                 ? commentsByPostId.get(item.Id)
                 : new List<FeedCommentWrapper>();
@@ -140,6 +168,19 @@ public with sharing class ClauseChatterController {
         ConnectApi.ChatterFeeds.likeFeedElement(
             Network.getNetworkId(),
             feedItemId
+        );
+    }
+
+    @AuraEnabled
+    public static void unlikePost(Id feedItemId) {
+        if (feedItemId == null) {
+            throw new AuraHandledException('Feed item Id is required.');
+        }
+
+        ConnectApi.ChatterFeeds.updateLikeForFeedElement(
+            Network.getNetworkId(),
+            feedItemId,
+            false
         );
     }
 
@@ -255,4 +296,43 @@ public with sharing class ClauseChatterController {
         
         ConnectApi.ChatterFeeds.postFeedElement(Network.getNetworkId(), input);
     }
+
+    private static Object getNestedValue(Map<String, Object> source, List<String> path) {
+        if (source == null || path == null || path.isEmpty()) {
+            return null;
+        }
+
+        Object current = source;
+        for (String segment : path) {
+            Map<String, Object> currentMap = extractMapValue(current);
+            if (currentMap == null) {
+                return null;
+            }
+            if (!currentMap.containsKey(segment)) {
+                return null;
+            }
+            current = currentMap.get(segment);
+        }
+
+        return current;
+    }
+
+    private static Boolean extractBoolean(Map<String, Object> source, List<String> path) {
+        Object value = getNestedValue(source, path);
+        return value instanceof Boolean ? (Boolean) value : false;
+    }
+
+    private static Map<String, Object> extractMap(Map<String, Object> source, List<String> path) {
+        Object value = getNestedValue(source, path);
+        return extractMapValue(value);
+    }
+
+    private static Map<String, Object> extractMapValue(Object value) {
+        try {
+            return (Map<String, Object>) value;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
 }
+
