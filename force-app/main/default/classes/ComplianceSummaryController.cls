@@ -94,7 +94,6 @@ public with sharing class ComplianceSummaryController {
         Set<Id> clauseIds = clauseMap.keySet();
 
         Date todayDate = Date.today();
-        Date next30Days = todayDate.addDays(30);
 
         Integer overdueTasks = 0;
         Integer upcomingTasks = 0;
@@ -115,7 +114,6 @@ public with sharing class ComplianceSummaryController {
                 WHERE WhatId IN :clauseIds
                   AND ActivityDate != null
                   AND ActivityDate >= :todayDate
-                  AND ActivityDate <= :next30Days
                   AND IsClosed = false
             ];
 
@@ -198,7 +196,6 @@ public with sharing class ComplianceSummaryController {
     ) {
         Set<Id> clauseIds = clauseMap.keySet();
         Date todayDate = Date.today();
-        Date next30Days = todayDate.addDays(30);
 
         List<Task> taskList;
 
@@ -233,7 +230,6 @@ public with sharing class ComplianceSummaryController {
                 WHERE WhatId IN :clauseIds
                   AND ActivityDate != null
                   AND ActivityDate >= :todayDate
-                  AND ActivityDate <= :next30Days
                   AND IsClosed = false
                 ORDER BY ActivityDate ASC, CreatedDate ASC
                 LIMIT :limitSize

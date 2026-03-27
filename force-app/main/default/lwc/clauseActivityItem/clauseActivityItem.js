@@ -264,6 +264,12 @@ export default class ClauseActivityItem extends NavigationMixin(LightningElement
     }
 
     createFollowupTask() {
+        const relatedWhatId = this.item?.whatId;
+        const subject = encodeURIComponent(this.item?.subject || '');
+        const defaultFieldValues = relatedWhatId
+            ? `WhatId=${relatedWhatId},Subject=Follow Up: ${subject}`
+            : `Subject=Follow Up: ${subject}`;
+
         this[NavigationMixin.Navigate]({
             type: 'standard__objectPage',
             attributes: {
@@ -271,12 +277,18 @@ export default class ClauseActivityItem extends NavigationMixin(LightningElement
                 actionName: 'new'
             },
             state: {
-                defaultFieldValues: `WhatId=${this.item.id},Subject=Follow Up: ${encodeURIComponent(this.item.subject || '')}`
+                defaultFieldValues
             }
         });
     }
 
     createFollowupEvent() {
+        const relatedWhatId = this.item?.whatId;
+        const subject = encodeURIComponent(this.item?.subject || '');
+        const defaultFieldValues = relatedWhatId
+            ? `WhatId=${relatedWhatId},Subject=Follow Up: ${subject}`
+            : `Subject=Follow Up: ${subject}`;
+
         this[NavigationMixin.Navigate]({
             type: 'standard__objectPage',
             attributes: {
@@ -284,7 +296,7 @@ export default class ClauseActivityItem extends NavigationMixin(LightningElement
                 actionName: 'new'
             },
             state: {
-                defaultFieldValues: `WhatId=${this.item.id},Subject=Follow Up: ${encodeURIComponent(this.item.subject || '')}`
+                defaultFieldValues
             }
         });
     }

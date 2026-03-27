@@ -2,6 +2,7 @@ public with sharing class ClauseActivityController {
 
     public class ActivityItemWrapper {
         @AuraEnabled public Id id;
+        @AuraEnabled public Id whatId;
         @AuraEnabled public String objectApiName;
         @AuraEnabled public String type;
         @AuraEnabled public String subject;
@@ -68,6 +69,7 @@ public with sharing class ClauseActivityController {
         ]) {
             ActivityItemWrapper w = new ActivityItemWrapper();
             w.id = t.Id;
+            w.whatId = t.WhatId;
             w.objectApiName = 'Task';
             w.type = 'Task';
             w.subject = t.Subject;
@@ -100,6 +102,7 @@ public with sharing class ClauseActivityController {
         ]) {
             ActivityItemWrapper w = new ActivityItemWrapper();
             w.id = e.Id;
+            w.whatId = e.WhatId;
             w.objectApiName = 'Event';
             w.type = 'Event';
             w.subject = e.Subject;
