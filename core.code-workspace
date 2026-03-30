@@ -1,0 +1,19 @@
+{
+  "folders": [
+    {
+      "path": "c:/Projects/SalesForce/Comply360"
+    }
+  ],
+  "settings": {
+    "eslint.workingDirectories": [
+      "c:/Projects/SalesForce/Comply360"
+    ],
+    "eslint.validate": [
+      "javascript",
+      "typescript"
+    ],
+    "eslint.options": {
+      "overrideConfigFile": "c:\\Projects\\SalesForce\\Comply360\\.eslintrc.json"
+    }
+  }
+}
