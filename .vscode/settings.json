@@ -41,5 +41,6 @@
   ],
   "eslint.options": {
     "overrideConfigFile": "c:\\Projects\\SalesForce\\Comply360\\.eslintrc.json"
-  }
+  },
+  "xml.preferences.showSchemaDocumentationType": "none"
 }

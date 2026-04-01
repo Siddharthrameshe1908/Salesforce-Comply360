@@ -2,6 +2,10 @@ import { LightningElement, api, track, wire } from "lwc";
 import { refreshApex } from "@salesforce/apex";
 import getClauseCards from "@salesforce/apex/ClausesController.getClauseCards";
 
+const MIN_PAGE_SIZE = 8;
+const MAX_PAGE_SIZE = 25;
+const TABLE_CHROME_HEIGHT = 42;
+const ESTIMATED_ROW_HEIGHT = 45;
 const ALL = "ALL";
 const EMPTY_FILTERS = () => ({ risk: ALL, status: ALL, domain: ALL, reviewer: ALL, type: ALL });
 const COLUMNS = [
@@ -35,7 +39,7 @@ const COLUMNS = [
 export default class ClausesLeftPanel extends LightningElement {
     @api recordId;
 
-    pageSize = 8;
+    pageSize = MIN_PAGE_SIZE;
     currentPage = 1;
     searchText = "";
     isPopoverOpen = false;
@@ -48,15 +52,26 @@ export default class ClausesLeftPanel extends LightningElement {
 
     _wiredResult;
     _statusStylesInjected = false;
+    _resizeHandlerBound = false;
     columns = COLUMNS;
 
     renderedCallback() {
         if (this._statusStylesInjected) {
+            this.updateDynamicPageSize();
             return;
         }
 
         this._statusStylesInjected = true;
         this.injectStatusStyles();
+        this.bindResizeListener();
+        this.updateDynamicPageSize();
+    }
+
+    disconnectedCallback() {
+        if (this._resizeHandlerBound) {
+            window.removeEventListener("resize", this.handleResize);
+            this._resizeHandlerBound = false;
+        }
     }
 
     @wire(getClauseCards, { complianceId: "$recordId" })
@@ -328,6 +343,10 @@ export default class ClausesLeftPanel extends LightningElement {
         }
     };
 
+    handleResize = () => {
+        this.updateDynamicPageSize();
+    };
+
     dispatchClauseSelect(clauseId, status, clauseName) {
         this.dispatchEvent(
             new CustomEvent("clauseselect", {
@@ -387,5 +406,35 @@ export default class ClausesLeftPanel extends LightningElement {
 
         const result = left > right ? 1 : -1;
         return direction === "desc" ? -result : result;
+    }
+
+    bindResizeListener() {
+        if (this._resizeHandlerBound) {
+            return;
+        }
+
+        window.addEventListener("resize", this.handleResize);
+        this._resizeHandlerBound = true;
+    }
+
+    updateDynamicPageSize() {
+        const tableWrap = this.template.querySelector(".clp__tableWrap");
+        if (!tableWrap) {
+            return;
+        }
+
+        const wrapHeight = Math.floor(tableWrap.getBoundingClientRect().height);
+        if (wrapHeight <= 0) {
+            return;
+        }
+
+        const availableHeight = Math.max(0, wrapHeight - TABLE_CHROME_HEIGHT);
+        const calculatedRows = Math.floor(availableHeight / ESTIMATED_ROW_HEIGHT);
+        const nextPageSize = Math.min(MAX_PAGE_SIZE, Math.max(MIN_PAGE_SIZE, calculatedRows));
+
+        if (nextPageSize !== this.pageSize) {
+            this.pageSize = nextPageSize;
+            this.currentPage = this.normalizedCurrentPage;
+        }
     }
 }

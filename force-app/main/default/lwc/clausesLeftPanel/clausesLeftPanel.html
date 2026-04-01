@@ -147,62 +147,64 @@
         </div>
 
         <div class="clp__list">
-            <template if:false={noResults}>
-                <lightning-datatable
-                    key-field="clauseId"
-                    data={pagedTableData}
-                    columns={columns}
-                    sorted-by={sortBy}
-                    sorted-direction={sortDirection}
-                    onsort={handleSort}
-                    onrowaction={handleRowAction}
-                    hide-checkbox-column
-                >
-                </lightning-datatable>
+            <div class="clp__tableWrap">
+                <template if:false={noResults}>
+                    <lightning-datatable
+                        key-field="clauseId"
+                        data={pagedTableData}
+                        columns={columns}
+                        sorted-by={sortBy}
+                        sorted-direction={sortDirection}
+                        onsort={handleSort}
+                        onrowaction={handleRowAction}
+                        hide-checkbox-column
+                    >
+                    </lightning-datatable>
+                </template>
 
-                <template if:true={showPagination}>
-                    <div class="clp__pagination">
-                        <div class="clp__pagination-info slds-text-body_small slds-text-color_weak">
-                            Showing {startRecord} - {endRecord} of {filteredCount}
-                        </div>
-                        <div class="clp__pagination-controls">
-                            <lightning-button
-                                label="Previous"
-                                variant="neutral"
-                                onclick={handlePreviousPage}
-                                disabled={isPreviousDisabled}
-                            >
-                            </lightning-button>
-
-                            <template for:each={pageButtons} for:item="pageItem">
-                                <lightning-button
-                                    key={pageItem.page}
-                                    label={pageItem.label}
-                                    variant={pageItem.variant}
-                                    data-page={pageItem.page}
-                                    onclick={handlePageClick}
-                                    class="clp__page-btn"
-                                >
-                                </lightning-button>
-                            </template>
-
-                            <lightning-button
-                                label="Next"
-                                variant="neutral"
-                                onclick={handleNextPage}
-                                disabled={isNextDisabled}
-                            >
-                            </lightning-button>
+                <template if:true={noResults}>
+                    <div class="slds-align_absolute-center slds-m-top_large">
+                        <div class="slds-text-align_center">
+                            <lightning-icon icon-name="utility:search" size="small" class="slds-icon-text-default"></lightning-icon>
+                            <p class="slds-text-body_small slds-text-color_weak slds-m-top_x-small">No clauses match your filters.</p>
                         </div>
                     </div>
                 </template>
-            </template>
+            </div>
 
-            <template if:true={noResults}>
-                <div class="slds-align_absolute-center slds-m-top_large">
-                    <div class="slds-text-align_center">
-                        <lightning-icon icon-name="utility:search" size="small" class="slds-icon-text-default"></lightning-icon>
-                        <p class="slds-text-body_small slds-text-color_weak slds-m-top_x-small">No clauses match your filters.</p>
+            <template if:true={showPagination}>
+                <div class="clp__pagination">
+                    <div class="clp__pagination-info slds-text-body_small slds-text-color_weak">
+                        Showing {startRecord} - {endRecord} of {filteredCount}
+                    </div>
+                    <div class="clp__pagination-controls">
+                        <lightning-button
+                            label="Previous"
+                            variant="neutral"
+                            onclick={handlePreviousPage}
+                            disabled={isPreviousDisabled}
+                        >
+                        </lightning-button>
+
+                        <template for:each={pageButtons} for:item="pageItem">
+                            <lightning-button
+                                key={pageItem.page}
+                                label={pageItem.label}
+                                variant={pageItem.variant}
+                                data-page={pageItem.page}
+                                onclick={handlePageClick}
+                                class="clp__page-btn"
+                            >
+                            </lightning-button>
+                        </template>
+
+                        <lightning-button
+                            label="Next"
+                            variant="neutral"
+                            onclick={handleNextPage}
+                            disabled={isNextDisabled}
+                        >
+                        </lightning-button>
                     </div>
                 </div>
             </template>

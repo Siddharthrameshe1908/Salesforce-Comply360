@@ -110,7 +110,7 @@
                                                         <div class="crp-field__main">
                                                             <div class="crp-field__value">
                                                                 <lightning-output-field
-                                                                    field-name="devcomply360__Clause_Lifecycle_Status__c">
+                                                                    field-name="devcomply360__Parent_Clause__c">
                                                                 </lightning-output-field>
                                                             </div>
                                                         </div>
@@ -130,7 +130,7 @@
                                                         <div class="crp-field__main">
                                                             <div class="crp-field__value">
                                                                 <lightning-output-field
-                                                                    field-name="devcomply360__Clause_Owner__c">
+                                                                    field-name="devcomply360__Clause_Lifecycle_Status__c">
                                                                 </lightning-output-field>
                                                             </div>
                                                         </div>
@@ -147,7 +147,7 @@
                                                         <div class="crp-field__main">
                                                             <div class="crp-field__value">
                                                                 <lightning-output-field
-                                                                    field-name="devcomply360__Section__c">
+                                                                    field-name="devcomply360__Clause_Owner__c">
                                                                 </lightning-output-field>
                                                             </div>
                                                         </div>
@@ -167,7 +167,7 @@
                                                         <div class="crp-field__main">
                                                             <div class="crp-field__value">
                                                                 <lightning-output-field
-                                                                    field-name="devcomply360__Clause_Type__c">
+                                                                    field-name="devcomply360__Section__c">
                                                                 </lightning-output-field>
                                                             </div>
                                                         </div>
@@ -184,7 +184,7 @@
                                                         <div class="crp-field__main">
                                                             <div class="crp-field__value">
                                                                 <lightning-output-field
-                                                                    field-name="devcomply360__Page_Number__c">
+                                                                    field-name="devcomply360__Clause_Type__c">
                                                                 </lightning-output-field>
                                                             </div>
                                                         </div>
@@ -204,7 +204,7 @@
                                                         <div class="crp-field__main">
                                                             <div class="crp-field__value">
                                                                 <lightning-output-field
-                                                                    field-name="devcomply360__Category__c">
+                                                                    field-name="devcomply360__Page_Number__c">
                                                                 </lightning-output-field>
                                                             </div>
                                                         </div>
@@ -221,7 +221,7 @@
                                                         <div class="crp-field__main">
                                                             <div class="crp-field__value">
                                                                 <lightning-output-field
-                                                                    field-name="devcomply360__Description__c">
+                                                                    field-name="devcomply360__Category__c">
                                                                 </lightning-output-field>
                                                             </div>
                                                         </div>
@@ -241,7 +241,7 @@
                                                         <div class="crp-field__main">
                                                             <div class="crp-field__value">
                                                                 <lightning-output-field
-                                                                    field-name="devcomply360__Obligation_Category__c">
+                                                                    field-name="devcomply360__Description__c">
                                                                 </lightning-output-field>
                                                             </div>
                                                         </div>
@@ -258,7 +258,44 @@
                                                         <div class="crp-field__main">
                                                             <div class="crp-field__value">
                                                                 <lightning-output-field
+                                                                    field-name="devcomply360__Obligation_Category__c">
+                                                                </lightning-output-field>
+                                                            </div>
+                                                        </div>
+                                                        <div class="crp-field__icon">
+                                                            <button type="button" class="crp-edit-btn" title="Edit"
+                                                                onclick={enterEditMode}>
+                                                                <lightning-icon icon-name="utility:edit" size="xx-small"
+                                                                    alternative-text="Edit">
+                                                                </lightning-icon>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Row 7 -->
+                                                <div class="crp-row">
+                                                    <div class="crp-field">
+                                                        <div class="crp-field__main">
+                                                            <div class="crp-field__value">
+                                                                <lightning-output-field
                                                                     field-name="devcomply360__Version__c">
+                                                                </lightning-output-field>
+                                                            </div>
+                                                        </div>
+                                                        <div class="crp-field__icon">
+                                                            <button type="button" class="crp-edit-btn" title="Edit"
+                                                                onclick={enterEditMode}>
+                                                                <lightning-icon icon-name="utility:edit" size="xx-small"
+                                                                    alternative-text="Edit">
+                                                                </lightning-icon>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="crp-field">
+                                                        <div class="crp-field__main">
+                                                            <div class="crp-field__value">
+                                                                <lightning-output-field
+                                                                    field-name="devcomply360__Risk_Level__c">
                                                                 </lightning-output-field>
                                                             </div>
                                                         </div>
@@ -278,7 +315,7 @@
                                                         <div class="crp-field__main">
                                                             <div class="crp-field__value">
                                                                 <lightning-output-field
-                                                                    field-name="devcomply360__Risk_Level__c">
+                                                                    field-name="devcomply360__Review_Date__c">
                                                                 </lightning-output-field>
                                                             </div>
                                                         </div>
@@ -295,7 +332,7 @@
                                                         <div class="crp-field__main">
                                                             <div class="crp-field__value">
                                                                 <lightning-output-field
-                                                                    field-name="devcomply360__Review_Date__c">
+                                                                    field-name="devcomply360__Reviewer__c">
                                                                 </lightning-output-field>
                                                             </div>
                                                         </div>
@@ -315,7 +352,7 @@
                                                         <div class="crp-field__main">
                                                             <div class="crp-field__value">
                                                                 <lightning-output-field
-                                                                    field-name="devcomply360__Reviewer__c">
+                                                                    field-name="devcomply360__Review_Notes__c">
                                                                 </lightning-output-field>
                                                             </div>
                                                         </div>
@@ -332,7 +369,7 @@
                                                         <div class="crp-field__main">
                                                             <div class="crp-field__value">
                                                                 <lightning-output-field
-                                                                    field-name="devcomply360__Review_Notes__c">
+                                                                    field-name="devcomply360__Due_Date__c">
                                                                 </lightning-output-field>
                                                             </div>
                                                         </div>
@@ -352,7 +389,7 @@
                                                         <div class="crp-field__main">
                                                             <div class="crp-field__value">
                                                                 <lightning-output-field
-                                                                    field-name="devcomply360__Due_Date__c">
+                                                                    field-name="devcomply360__Review_Frequency__c">
                                                                 </lightning-output-field>
                                                             </div>
                                                         </div>
@@ -369,7 +406,7 @@
                                                         <div class="crp-field__main">
                                                             <div class="crp-field__value">
                                                                 <lightning-output-field
-                                                                    field-name="devcomply360__Review_Frequency__c">
+                                                                    field-name="devcomply360__Assigned_To__c">
                                                                 </lightning-output-field>
                                                             </div>
                                                         </div>
@@ -389,23 +426,6 @@
                                                         <div class="crp-field__main">
                                                             <div class="crp-field__value">
                                                                 <lightning-output-field
-                                                                    field-name="devcomply360__Assigned_To__c">
-                                                                </lightning-output-field>
-                                                            </div>
-                                                        </div>
-                                                        <div class="crp-field__icon">
-                                                            <button type="button" class="crp-edit-btn" title="Edit"
-                                                                onclick={enterEditMode}>
-                                                                <lightning-icon icon-name="utility:edit" size="xx-small"
-                                                                    alternative-text="Edit">
-                                                                </lightning-icon>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div class="crp-field">
-                                                        <div class="crp-field__main">
-                                                            <div class="crp-field__value">
-                                                                <lightning-output-field
                                                                     field-name="devcomply360__Clause_Text__c">
                                                                 </lightning-output-field>
                                                             </div>
@@ -419,6 +439,7 @@
                                                             </button>
                                                         </div>
                                                     </div>
+                                                    <div class="crp-field crp-field--empty"></div>
                                                 </div>
                                             </div>
                                         </lightning-record-view-form>
@@ -427,9 +448,12 @@
                                     <!-- EDIT MODE -->
                                     <template if:true={isEditMode}>
                                         <lightning-record-edit-form object-api-name="devcomply360__Clause__c"
-                                            record-id={selectedClauseId} onsuccess={handleSaveSuccess}
-                                            onsubmit={handleSubmit} onerror={handleSaveError}>
+                                            record-id={selectedClauseId} onsubmit={handleSubmit}>
                                             <lightning-messages></lightning-messages>
+                                            <template if:true={isSaving}>
+                                                <lightning-spinner alternative-text="Saving new version" size="small">
+                                                </lightning-spinner>
+                                            </template>
                                             <div class="crp-fields crp-fields--edit">
                                                 <div class="crp-row">
                                                     <div class="crp-field crp-field--readonly">
@@ -454,106 +478,115 @@
                                                     </div>
                                                     <div class="crp-field">
                                                         <lightning-input-field
-                                                            field-name="devcomply360__Clause_Lifecycle_Status__c">
+                                                            field-name="devcomply360__Parent_Clause__c">
                                                         </lightning-input-field>
                                                     </div>
                                                 </div>
                                                 <div class="crp-row">
+                                                    <div class="crp-field">
+                                                        <lightning-input-field
+                                                            field-name="devcomply360__Clause_Lifecycle_Status__c">
+                                                        </lightning-input-field>
+                                                    </div>
                                                     <div class="crp-field">
                                                         <lightning-input-field
                                                             field-name="devcomply360__Clause_Owner__c">
                                                         </lightning-input-field>
                                                     </div>
+                                                </div>
+                                                <div class="crp-row">
                                                     <div class="crp-field">
                                                         <lightning-input-field field-name="devcomply360__Section__c">
                                                         </lightning-input-field>
                                                     </div>
-                                                </div>
-                                                <div class="crp-row">
                                                     <div class="crp-field">
                                                         <lightning-input-field
                                                             field-name="devcomply360__Clause_Type__c">
                                                         </lightning-input-field>
                                                     </div>
+                                                </div>
+                                                <div class="crp-row">
                                                     <div class="crp-field">
                                                         <lightning-input-field
                                                             field-name="devcomply360__Page_Number__c">
                                                         </lightning-input-field>
                                                     </div>
-                                                </div>
-                                                <div class="crp-row">
                                                     <div class="crp-field">
                                                         <lightning-input-field field-name="devcomply360__Category__c">
                                                         </lightning-input-field>
                                                     </div>
+                                                </div>
+                                                <div class="crp-row">
                                                     <div class="crp-field">
                                                         <lightning-input-field
                                                             field-name="devcomply360__Description__c">
                                                         </lightning-input-field>
                                                     </div>
-                                                </div>
-                                                <div class="crp-row">
                                                     <div class="crp-field">
                                                         <lightning-input-field
                                                             field-name="devcomply360__Obligation_Category__c">
                                                         </lightning-input-field>
                                                     </div>
+                                                </div>
+                                                <div class="crp-row">
                                                     <div class="crp-field">
                                                         <lightning-input-field field-name="devcomply360__Version__c">
                                                         </lightning-input-field>
                                                     </div>
-                                                </div>
-                                                <div class="crp-row">
                                                     <div class="crp-field">
                                                         <lightning-input-field field-name="devcomply360__Risk_Level__c">
                                                         </lightning-input-field>
                                                     </div>
+                                                </div>
+                                                <div class="crp-row">
                                                     <div class="crp-field">
                                                         <lightning-input-field
                                                             field-name="devcomply360__Review_Date__c">
                                                         </lightning-input-field>
                                                     </div>
-                                                </div>
-                                                <div class="crp-row">
                                                     <div class="crp-field">
                                                         <lightning-input-field field-name="devcomply360__Reviewer__c">
                                                         </lightning-input-field>
                                                     </div>
+                                                </div>
+                                                <div class="crp-row">
                                                     <div class="crp-field">
                                                         <lightning-input-field
                                                             field-name="devcomply360__Review_Notes__c">
                                                         </lightning-input-field>
                                                     </div>
-                                                </div>
-                                                <div class="crp-row">
                                                     <div class="crp-field">
                                                         <lightning-input-field field-name="devcomply360__Due_Date__c">
                                                         </lightning-input-field>
                                                     </div>
+                                                </div>
+                                                <div class="crp-row">
                                                     <div class="crp-field">
                                                         <lightning-input-field
                                                             field-name="devcomply360__Review_Frequency__c">
                                                         </lightning-input-field>
                                                     </div>
-                                                </div>
-                                                <div class="crp-row">
                                                     <div class="crp-field">
                                                         <lightning-input-field
                                                             field-name="devcomply360__Assigned_To__c">
                                                         </lightning-input-field>
                                                     </div>
+                                                </div>
+                                                <div class="crp-row">
                                                     <div class="crp-field">
                                                         <lightning-input-field
                                                             field-name="devcomply360__Clause_Text__c">
                                                         </lightning-input-field>
                                                     </div>
+                                                    <div class="crp-field crp-field--empty"></div>
                                                 </div>
                                             </div>
                                             <div class="crp-form-actions">
                                                 <lightning-button label="Cancel" onclick={handleCancelEdit}
-                                                    class="slds-m-right_small">
+                                                    class="slds-m-right_small" disabled={isSaving}>
                                                 </lightning-button>
-                                                <lightning-button variant="brand" type="submit" label="Save">
+                                                <lightning-button variant="brand" type="submit" label="Save"
+                                                    disabled={isSaving}>
                                                 </lightning-button>
                                             </div>
                                         </lightning-record-edit-form>
@@ -595,6 +628,27 @@
                 <c-clause-document-viewer clause-id={selectedClauseId}>
                 </c-clause-document-viewer>
             </div>
+        </template>
+
+        <template if:true={showVersionModal}>
+            <section role="dialog" tabindex="-1" aria-modal="true"
+                aria-labelledby="clause-version-confirm-heading" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h2 id="clause-version-confirm-heading" class="slds-text-heading_medium">Confirm Save</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <p>Do you want to save and create a new record with these changes?</p>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button label="No" onclick={handleDeclineVersioning}
+                            disabled={isSaving}></lightning-button>
+                        <lightning-button variant="brand" label="Yes" onclick={handleConfirmVersioning}
+                            class="slds-m-left_small" disabled={isSaving}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
         </template>
     </div>
 </template>
