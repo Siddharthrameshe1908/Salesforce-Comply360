@@ -7,7 +7,7 @@ import getTaskSubjectOptions from '@salesforce/apex/ClauseActivityController.get
 import getAssignableUsers from '@salesforce/apex/ClauseActivityController.getAssignableUsers';
 
 export default class ClauseActivityPanel extends LightningElement {
-    @api recordId;
+    _recordId;
 
     @track isLoading = false;
     @track allItems = [];
@@ -56,12 +56,26 @@ export default class ClauseActivityPanel extends LightningElement {
 
     wiredActivitiesResult;
 
-    @wire(getActivities, { recordId: '$recordId' })
+    @api
+    get recordId() {
+        return this._recordId;
+    }
+
+    set recordId(value) {
+        this._recordId = value;
+        this.isLoading = Boolean(value);
+    }
+
+    @wire(getActivities, { recordId: '$_recordId' })
     wiredActivities(result) {
         this.wiredActivitiesResult = result;
-        this.isLoading = true;
 
         const { data, error } = result;
+        if (!data && !error) {
+            this.isLoading = Boolean(this._recordId);
+            return;
+        }
+
         if (data) {
             this.allItems = data.map((item) => this.normalizeItem(item));
         } else if (error) {

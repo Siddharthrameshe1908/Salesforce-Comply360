@@ -6,7 +6,7 @@ import getChatterPosts from '@salesforce/apex/ClauseChatterController.getChatter
 import createPost from '@salesforce/apex/ClauseChatterController.createPost';
 
 export default class ClauseChatterPanel extends LightningElement {
-    @api recordId;
+    _recordId;
 
     @track commentBody = '';
     @track posts = [];
@@ -16,20 +16,36 @@ export default class ClauseChatterPanel extends LightningElement {
     searchText = '';
     wiredPostsResult;
 
+    @api
+    get recordId() {
+        return this._recordId;
+    }
+
+    set recordId(value) {
+        this._recordId = value;
+        this.isLoading = Boolean(value);
+    }
+
     @wire(getChatterPosts, {
-        recordId: '$recordId',
+        recordId: '$_recordId',
         sortBy: '$sortBy'
     })
     wiredPosts(result) {
         this.wiredPostsResult = result;
 
         const { data, error } = result;
+        if (!data && !error) {
+            this.isLoading = Boolean(this._recordId);
+            return;
+        }
+
         if (data) {
             this.posts = data;
         } else if (error) {
             this.posts = [];
             this.showToast('Error', this.reduceError(error), 'error');
         }
+        this.isLoading = false;
     }
 
     get filteredPosts() {
@@ -66,6 +82,7 @@ export default class ClauseChatterPanel extends LightningElement {
     }
 
     handleSortChange(event) {
+        this.isLoading = true;
         this.sortBy = event.detail.value;
     }
 

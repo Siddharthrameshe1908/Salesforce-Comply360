@@ -37,7 +37,8 @@ const COLUMNS = [
 ];
 
 export default class ClausesLeftPanel extends LightningElement {
-    @api recordId;
+    _recordId;
+    isLoading = false;
 
     pageSize = MIN_PAGE_SIZE;
     currentPage = 1;
@@ -54,6 +55,16 @@ export default class ClausesLeftPanel extends LightningElement {
     _statusStylesInjected = false;
     _resizeHandlerBound = false;
     columns = COLUMNS;
+
+    @api
+    get recordId() {
+        return this._recordId;
+    }
+
+    set recordId(value) {
+        this._recordId = value;
+        this.isLoading = Boolean(value);
+    }
 
     renderedCallback() {
         if (this._statusStylesInjected) {
@@ -74,7 +85,7 @@ export default class ClausesLeftPanel extends LightningElement {
         }
     }
 
-    @wire(getClauseCards, { complianceId: "$recordId" })
+    @wire(getClauseCards, { complianceId: "$_recordId" })
     wiredClauseCards(result) {
         this._wiredResult = result;
         const { data, error } = result;
@@ -92,13 +103,16 @@ export default class ClausesLeftPanel extends LightningElement {
                 documentName: c.documentName || ""
             }));
             this.currentPage = 1;
+            this.isLoading = false;
         } else if (error) {
             this.clauses = [];
             this.currentPage = 1;
+            this.isLoading = false;
         }
     }
 
     @api refresh() {
+        this.isLoading = true;
         refreshApex(this._wiredResult);
     }
 

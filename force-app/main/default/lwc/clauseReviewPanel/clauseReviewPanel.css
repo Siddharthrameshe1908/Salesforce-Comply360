@@ -59,10 +59,21 @@
 }
 
 .crp__detail-card {
+    position: relative;
     display: flex;
     flex-direction: column;
     height: 100%;
     overflow: hidden;
+}
+
+.crp__loading-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.45);
 }
 
 .crp__tab-header {
@@ -196,6 +207,14 @@
 
 .crp-edit-btn lightning-icon {
     --slds-c-icon-color-foreground-default: #747474;
+}
+
+.crp--enforced .crp-field__icon {
+    display: none;
+}
+
+.crp--enforced .crp-field__icon.crp-field__icon--lifecycle {
+    display: flex;
 }
 
 .crp-form-actions {

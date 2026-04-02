@@ -2,7 +2,9 @@ public with sharing class ClauseVersioningController {
     private static final String VERSION_FIELD = 'devcomply360__Version__c';
     private static final String STATUS_FIELD = 'devcomply360__Clause_Lifecycle_Status__c';
     private static final String PARENT_FIELD = 'devcomply360__Parent_Clause__c';
-    private static final Set<String> IMMUTABLE_LIFECYCLE_STATUSES = new Set<String>{ 'Enforced' };
+    private static final Set<String> DIRECT_SAVE_STATUSES = new Set<String>{ 'Draft', 'In Review', 'Approved' };
+    private static final String ENFORCED_STATUS = 'Enforced';
+    private static final String OBSOLETE_STATUS = 'Obsolete';
 
     private static final Set<String> COPY_FIELDS = new Set<String>{
         'Name',
@@ -50,15 +52,24 @@ public with sharing class ClauseVersioningController {
             throw new AuraHandledException('Unable to load the selected clause.');
         }
 
+        if (editedValues == null) {
+            editedValues = new Map<String, Object>();
+        }
+
         String existingLifecycle = (String) existingClause.get(STATUS_FIELD);
-        if (IMMUTABLE_LIFECYCLE_STATUSES.contains(existingLifecycle)) {
+        String requestedLifecycle = existingLifecycle;
+        if (editedValues.containsKey(STATUS_FIELD) && editedValues.get(STATUS_FIELD) != null) {
+            requestedLifecycle = String.valueOf(editedValues.get(STATUS_FIELD)).trim();
+        }
+
+        if (DIRECT_SAVE_STATUSES.contains(existingLifecycle)) {
             throw new AuraHandledException(
-                'This clause cannot be edited because lifecycle status is ' + existingLifecycle + '.'
+                'Version creation is not allowed when lifecycle status is ' + existingLifecycle + '.'
             );
         }
 
-        if (editedValues == null) {
-            editedValues = new Map<String, Object>();
+        if (ENFORCED_STATUS.equals(existingLifecycle) && !OBSOLETE_STATUS.equals(requestedLifecycle)) {
+            throw new AuraHandledException('You can edit the values only in Obsolete state.');
         }
 
         Savepoint savepointRef = Database.setSavepoint();

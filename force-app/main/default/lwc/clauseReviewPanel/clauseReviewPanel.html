@@ -1,5 +1,5 @@
 <template>
-    <div class="crp">
+    <div class={panelContainerClass}>
         <!-- Action modal -->
         <!-- <template if:true={activeAction}>
             <c-clause-action-modal clause-id={selectedClauseId} action={activeAction} onclose={closeModal}
@@ -29,6 +29,11 @@
                 </div>
                 <template if:true={selectedClauseId}>
                     <div class="slds-card crp__detail-card">
+                    <template if:true={isDetailLoading}>
+                        <div class="crp__loading-overlay">
+                            <lightning-spinner alternative-text="Loading clause details" size="medium"></lightning-spinner>
+                        </div>
+                    </template>
 
                     <!-- ── FIXED TAB HEADER ── -->
                     <div class="crp__tab-header">
@@ -134,7 +139,7 @@
                                                                 </lightning-output-field>
                                                             </div>
                                                         </div>
-                                                        <div class="crp-field__icon">
+                                                        <div class="crp-field__icon crp-field__icon--lifecycle">
                                                             <button type="button" class="crp-edit-btn" title="Edit"
                                                                 onclick={enterEditMode}>
                                                                 <lightning-icon icon-name="utility:edit" size="xx-small"
@@ -448,7 +453,8 @@
                                     <!-- EDIT MODE -->
                                     <template if:true={isEditMode}>
                                         <lightning-record-edit-form object-api-name="devcomply360__Clause__c"
-                                            record-id={selectedClauseId} onsubmit={handleSubmit}>
+                                            record-id={selectedClauseId} onsubmit={handleSubmit}
+                                            onsuccess={handleSaveSuccess} onerror={handleSaveError}>
                                             <lightning-messages></lightning-messages>
                                             <template if:true={isSaving}>
                                                 <lightning-spinner alternative-text="Saving new version" size="small">
@@ -473,109 +479,128 @@
                                                 </div>
                                                 <div class="crp-row">
                                                     <div class="crp-field">
-                                                        <lightning-input-field field-name="Name">
+                                                        <lightning-input-field field-name="Name"
+                                                            disabled={areNonLifecycleFieldsLocked}>
                                                         </lightning-input-field>
                                                     </div>
                                                     <div class="crp-field">
                                                         <lightning-input-field
-                                                            field-name="devcomply360__Parent_Clause__c">
+                                                            field-name="devcomply360__Parent_Clause__c"
+                                                            disabled={areNonLifecycleFieldsLocked}>
                                                         </lightning-input-field>
                                                     </div>
                                                 </div>
                                                 <div class="crp-row">
                                                     <div class="crp-field">
                                                         <lightning-input-field
-                                                            field-name="devcomply360__Clause_Lifecycle_Status__c">
+                                                            field-name="devcomply360__Clause_Lifecycle_Status__c"
+                                                            onchange={handleLifecycleStatusChange}>
                                                         </lightning-input-field>
                                                     </div>
                                                     <div class="crp-field">
                                                         <lightning-input-field
-                                                            field-name="devcomply360__Clause_Owner__c">
+                                                            field-name="devcomply360__Clause_Owner__c"
+                                                            disabled={areNonLifecycleFieldsLocked}>
                                                         </lightning-input-field>
                                                     </div>
                                                 </div>
                                                 <div class="crp-row">
                                                     <div class="crp-field">
-                                                        <lightning-input-field field-name="devcomply360__Section__c">
+                                                        <lightning-input-field field-name="devcomply360__Section__c"
+                                                            disabled={areNonLifecycleFieldsLocked}>
                                                         </lightning-input-field>
                                                     </div>
                                                     <div class="crp-field">
                                                         <lightning-input-field
-                                                            field-name="devcomply360__Clause_Type__c">
-                                                        </lightning-input-field>
-                                                    </div>
-                                                </div>
-                                                <div class="crp-row">
-                                                    <div class="crp-field">
-                                                        <lightning-input-field
-                                                            field-name="devcomply360__Page_Number__c">
-                                                        </lightning-input-field>
-                                                    </div>
-                                                    <div class="crp-field">
-                                                        <lightning-input-field field-name="devcomply360__Category__c">
+                                                            field-name="devcomply360__Clause_Type__c"
+                                                            disabled={areNonLifecycleFieldsLocked}>
                                                         </lightning-input-field>
                                                     </div>
                                                 </div>
                                                 <div class="crp-row">
                                                     <div class="crp-field">
                                                         <lightning-input-field
-                                                            field-name="devcomply360__Description__c">
+                                                            field-name="devcomply360__Page_Number__c"
+                                                            disabled={areNonLifecycleFieldsLocked}>
                                                         </lightning-input-field>
                                                     </div>
                                                     <div class="crp-field">
-                                                        <lightning-input-field
-                                                            field-name="devcomply360__Obligation_Category__c">
-                                                        </lightning-input-field>
-                                                    </div>
-                                                </div>
-                                                <div class="crp-row">
-                                                    <div class="crp-field">
-                                                        <lightning-input-field field-name="devcomply360__Version__c">
-                                                        </lightning-input-field>
-                                                    </div>
-                                                    <div class="crp-field">
-                                                        <lightning-input-field field-name="devcomply360__Risk_Level__c">
+                                                        <lightning-input-field field-name="devcomply360__Category__c"
+                                                            disabled={areNonLifecycleFieldsLocked}>
                                                         </lightning-input-field>
                                                     </div>
                                                 </div>
                                                 <div class="crp-row">
                                                     <div class="crp-field">
                                                         <lightning-input-field
-                                                            field-name="devcomply360__Review_Date__c">
+                                                            field-name="devcomply360__Description__c"
+                                                            disabled={areNonLifecycleFieldsLocked}>
                                                         </lightning-input-field>
                                                     </div>
                                                     <div class="crp-field">
-                                                        <lightning-input-field field-name="devcomply360__Reviewer__c">
+                                                        <lightning-input-field
+                                                            field-name="devcomply360__Obligation_Category__c"
+                                                            disabled={areNonLifecycleFieldsLocked}>
+                                                        </lightning-input-field>
+                                                    </div>
+                                                </div>
+                                                <div class="crp-row">
+                                                    <div class="crp-field">
+                                                        <lightning-input-field field-name="devcomply360__Version__c"
+                                                            disabled={areNonLifecycleFieldsLocked}>
+                                                        </lightning-input-field>
+                                                    </div>
+                                                    <div class="crp-field">
+                                                        <lightning-input-field field-name="devcomply360__Risk_Level__c"
+                                                            disabled={areNonLifecycleFieldsLocked}>
                                                         </lightning-input-field>
                                                     </div>
                                                 </div>
                                                 <div class="crp-row">
                                                     <div class="crp-field">
                                                         <lightning-input-field
-                                                            field-name="devcomply360__Review_Notes__c">
+                                                            field-name="devcomply360__Review_Date__c"
+                                                            disabled={areNonLifecycleFieldsLocked}>
                                                         </lightning-input-field>
                                                     </div>
                                                     <div class="crp-field">
-                                                        <lightning-input-field field-name="devcomply360__Due_Date__c">
-                                                        </lightning-input-field>
-                                                    </div>
-                                                </div>
-                                                <div class="crp-row">
-                                                    <div class="crp-field">
-                                                        <lightning-input-field
-                                                            field-name="devcomply360__Review_Frequency__c">
-                                                        </lightning-input-field>
-                                                    </div>
-                                                    <div class="crp-field">
-                                                        <lightning-input-field
-                                                            field-name="devcomply360__Assigned_To__c">
+                                                        <lightning-input-field field-name="devcomply360__Reviewer__c"
+                                                            disabled={areNonLifecycleFieldsLocked}>
                                                         </lightning-input-field>
                                                     </div>
                                                 </div>
                                                 <div class="crp-row">
                                                     <div class="crp-field">
                                                         <lightning-input-field
-                                                            field-name="devcomply360__Clause_Text__c">
+                                                            field-name="devcomply360__Review_Notes__c"
+                                                            disabled={areNonLifecycleFieldsLocked}>
+                                                        </lightning-input-field>
+                                                    </div>
+                                                    <div class="crp-field">
+                                                        <lightning-input-field field-name="devcomply360__Due_Date__c"
+                                                            disabled={areNonLifecycleFieldsLocked}>
+                                                        </lightning-input-field>
+                                                    </div>
+                                                </div>
+                                                <div class="crp-row">
+                                                    <div class="crp-field">
+                                                        <lightning-input-field
+                                                            field-name="devcomply360__Review_Frequency__c"
+                                                            disabled={areNonLifecycleFieldsLocked}>
+                                                        </lightning-input-field>
+                                                    </div>
+                                                    <div class="crp-field">
+                                                        <lightning-input-field
+                                                            field-name="devcomply360__Assigned_To__c"
+                                                            disabled={areNonLifecycleFieldsLocked}>
+                                                        </lightning-input-field>
+                                                    </div>
+                                                </div>
+                                                <div class="crp-row">
+                                                    <div class="crp-field">
+                                                        <lightning-input-field
+                                                            field-name="devcomply360__Clause_Text__c"
+                                                            disabled={areNonLifecycleFieldsLocked}>
                                                         </lightning-input-field>
                                                     </div>
                                                     <div class="crp-field crp-field--empty"></div>

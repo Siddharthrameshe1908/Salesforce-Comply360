@@ -28,7 +28,9 @@ const CLAUSE_UI_FIELDS = [
     'devcomply360__Clause__c.devcomply360__Assigned_To__c',
     'devcomply360__Clause__c.devcomply360__Clause_Text__c'
 ];
-const IMMUTABLE_LIFECYCLE_STATUSES = ['Enforced'];
+const DIRECT_SAVE_STATUSES = ['Draft', 'In Review', 'Approved'];
+const ENFORCED_STATUS = 'Enforced';
+const OBSOLETE_STATUS = 'Obsolete';
 
 export default class ClauseReviewPanel extends LightningElement {
     @api recordId;
@@ -40,8 +42,10 @@ export default class ClauseReviewPanel extends LightningElement {
     @track viewMode = 'list';
     @track showVersionModal = false;
     @track isSaving = false;
+    @track isDetailLoading = false;
     @track originalClauseData = {};
     @track pendingEditedValues = {};
+    @track currentEditLifecycleStatus;
 
     @wire(MessageContext) messageContext;
     _subscription = null;
@@ -50,7 +54,19 @@ export default class ClauseReviewPanel extends LightningElement {
     @wire(getRecord, { recordId: '$selectedClauseId', fields: CLAUSE_UI_FIELDS })
     wiredClauseRecord(value) {
         this.clauseWireResult = value;
-        const { data } = value;
+        const { data, error } = value;
+        if (!this.selectedClauseId) {
+            this.isDetailLoading = false;
+            return;
+        }
+
+        if (!data && !error) {
+            this.isDetailLoading = true;
+            return;
+        }
+
+        this.isDetailLoading = false;
+
         if (!data) {
             return;
         }
@@ -69,6 +85,7 @@ export default class ClauseReviewPanel extends LightningElement {
         this.viewMode = 'list';
         this.selectedClauseId = undefined;
         this.selectedClauseName = undefined;
+        this.isDetailLoading = false;
 
         if (!this._subscription) {
             this._subscription = subscribe(
@@ -80,8 +97,10 @@ export default class ClauseReviewPanel extends LightningElement {
                     this.isEditMode = false;
                     this.showVersionModal = false;
                     this.pendingEditedValues = {};
+                    this.currentEditLifecycleStatus = undefined;
                     this.activeTab = 'details';
                     this.viewMode = msg.clauseId ? 'detail' : 'list';
+                    this.isDetailLoading = Boolean(msg.clauseId);
                 }
             );
         }
@@ -100,8 +119,10 @@ export default class ClauseReviewPanel extends LightningElement {
         this.isEditMode = false;
         this.showVersionModal = false;
         this.pendingEditedValues = {};
+        this.currentEditLifecycleStatus = undefined;
         this.activeTab = 'details';
         this.viewMode = 'detail';
+        this.isDetailLoading = Boolean(event.detail.clauseId);
     };
 
     handleBreadcrumbClick = (event) => {
@@ -114,6 +135,8 @@ export default class ClauseReviewPanel extends LightningElement {
         this.isEditMode = false;
         this.showVersionModal = false;
         this.pendingEditedValues = {};
+        this.currentEditLifecycleStatus = undefined;
+        this.isDetailLoading = false;
     };
 
     handleReject = () => {
@@ -182,6 +205,22 @@ export default class ClauseReviewPanel extends LightningElement {
         return this.selectedClauseName || this.originalClauseData?.Name || 'Selected Clause';
     }
 
+    get originalLifecycleStatus() {
+        return this.originalClauseData?.devcomply360__Clause_Lifecycle_Status__c;
+    }
+
+    get isEnforcedRecord() {
+        return this.originalLifecycleStatus === ENFORCED_STATUS;
+    }
+
+    get areNonLifecycleFieldsLocked() {
+        return this.isEnforcedRecord && this.currentEditLifecycleStatus !== OBSOLETE_STATUS;
+    }
+
+    get panelContainerClass() {
+        return this.isEnforcedRecord ? 'crp crp--enforced' : 'crp';
+    }
+
     handleTabClick(event) {
         this.activeTab = event.currentTarget.dataset.tab;
     }
@@ -201,6 +240,7 @@ export default class ClauseReviewPanel extends LightningElement {
         this.selectedClauseId = undefined;
 
         setTimeout(() => {
+            this.isDetailLoading = Boolean(id);
             this.selectedClauseId = id;
             this.isEditMode = false;
         }, 0);
@@ -212,6 +252,7 @@ export default class ClauseReviewPanel extends LightningElement {
         }
         this.showVersionModal = false;
         this.pendingEditedValues = {};
+        this.currentEditLifecycleStatus = this.originalLifecycleStatus;
         this.isEditMode = true;
         this.activeTab = 'details';
     };
@@ -219,23 +260,18 @@ export default class ClauseReviewPanel extends LightningElement {
     handleCancelEdit = () => {
         this.showVersionModal = false;
         this.pendingEditedValues = {};
+        this.currentEditLifecycleStatus = undefined;
         this.isEditMode = false;
+    };
+
+    handleLifecycleStatusChange = (event) => {
+        this.currentEditLifecycleStatus = event.detail?.value;
     };
 
     handleSubmit = (event) => {
         event.preventDefault();
 
         if (this.isSaving) {
-            return;
-        }
-
-        const lifecycleStatus = this.originalClauseData?.devcomply360__Clause_Lifecycle_Status__c;
-        if (IMMUTABLE_LIFECYCLE_STATUSES.includes(lifecycleStatus)) {
-            this.showToast(
-                'Error',
-                `You cannot edit this clause because lifecycle status is ${lifecycleStatus}.`,
-                'error'
-            );
             return;
         }
 
@@ -249,7 +285,26 @@ export default class ClauseReviewPanel extends LightningElement {
             return;
         }
 
-        this.pendingEditedValues = { ...event.detail.fields };
+        const submittedFields = { ...event.detail.fields };
+        const originalStatus = this.originalLifecycleStatus;
+        const selectedStatus = submittedFields.devcomply360__Clause_Lifecycle_Status__c || this.currentEditLifecycleStatus || originalStatus;
+
+        if (DIRECT_SAVE_STATUSES.includes(originalStatus)) {
+            this.isSaving = true;
+            event.target.submit(submittedFields);
+            return;
+        }
+
+        if (originalStatus === ENFORCED_STATUS && selectedStatus !== OBSOLETE_STATUS) {
+            this.showToast(
+                'Error',
+                'You can edit the values only in Obsolete state.',
+                'error'
+            );
+            return;
+        }
+
+        this.pendingEditedValues = submittedFields;
         this.showVersionModal = true;
     };
 
@@ -279,7 +334,9 @@ export default class ClauseReviewPanel extends LightningElement {
 
             this.showVersionModal = false;
             this.pendingEditedValues = {};
+            this.currentEditLifecycleStatus = undefined;
             this.isEditMode = false;
+            this.isDetailLoading = true;
             this.selectedClauseId = newClauseId;
             this.selectedClauseName = undefined;
 
@@ -292,6 +349,26 @@ export default class ClauseReviewPanel extends LightningElement {
         } finally {
             this.isSaving = false;
         }
+    };
+
+    handleSaveSuccess = async () => {
+        this.showToast('Success', 'Clause updated successfully.', 'success');
+        this.isSaving = false;
+        this.showVersionModal = false;
+        this.pendingEditedValues = {};
+        this.currentEditLifecycleStatus = undefined;
+        this.isEditMode = false;
+        this.selectedClauseName = undefined;
+
+        if (this.clauseWireResult) {
+            await refreshApex(this.clauseWireResult);
+        }
+    };
+
+    handleSaveError = (event) => {
+        this.isSaving = false;
+        const message = event?.detail?.message || 'Error updating clause.';
+        this.showToast('Error', message, 'error');
     };
 
     showToast(title, message, variant) {

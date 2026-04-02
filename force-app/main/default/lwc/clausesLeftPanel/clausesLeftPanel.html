@@ -147,6 +147,11 @@
         </div>
 
         <div class="clp__list">
+            <template if:true={isLoading}>
+                <div class="clp__loading">
+                    <lightning-spinner alternative-text="Loading clauses" size="medium"></lightning-spinner>
+                </div>
+            </template>
             <div class="clp__tableWrap">
                 <template if:false={noResults}>
                     <lightning-datatable
